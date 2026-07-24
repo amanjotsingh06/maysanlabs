@@ -105,7 +105,7 @@ export default function Testimonials() {
                 className="w-full bg-[var(--surface-elevated)] border border-[var(--border-subtle)] rounded-2xl p-8 md:p-10 shadow-lg"
               >
                 <div className="flex gap-0.5 mb-4">
-                  {[...Array(5)].map((_, i) => (
+                  {Array.from({ length: 5 }).map((_, i) => (
                     <Star key={i} size={14} className="text-brand-primary fill-brand-primary" />
                   ))}
                 </div>
@@ -140,8 +140,8 @@ export default function Testimonials() {
           <div className="flex items-center justify-center mt-8 relative">
             <style>{`
               @keyframes slide-progress {
-                from { width: 0%; }
-                to { width: 100%; }
+                from { transform: scaleX(0); }
+                to { transform: scaleX(1); }
               }
             `}</style>
             <div className="flex items-center gap-1">
@@ -162,7 +162,7 @@ export default function Testimonials() {
                     {i === current && (
                       <div
                         key={`progress-${current}`}
-                        className="absolute top-0 left-0 h-full bg-foreground/80 rounded-full"
+                        className="absolute top-0 left-0 h-full w-full bg-foreground/80 rounded-full origin-left"
                         style={{
                           animation: `slide-progress 5000ms linear forwards`,
                           animationPlayState: isPaused ? "paused" : "running",
