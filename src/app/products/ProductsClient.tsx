@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Navbar from "@/components/layout/navbar";
 import ContactFooter from "@/components/layout/footer";
@@ -25,7 +25,7 @@ const liveProducts = [
     ctaText: "Explore Case Study",
     secondaryCtaText: "Launch Live Site",
     secondaryCtaHref: "https://flashhfashion.in/",
-    scrollPercentage: "80%"
+    scrollPercentage: "0%"
   },
   {
     name: "MaysanMails",
@@ -38,13 +38,13 @@ const liveProducts = [
       "Advanced campaign automation and real-time analytics",
       "Complete data privacy — your list, your server"
     ],
-    imageUrl: "/og-image.webp",
+    imageUrl: "/MaysanMails.png?v=1",
     iframeUrl: "",
     ctaHref: "/contact",
     ctaText: "Set Up Your Email Infrastructure",
     secondaryCtaText: "",
     secondaryCtaHref: "",
-    scrollPercentage: "50%"
+    scrollPercentage: "0%"
   },
   {
     name: "Edu-Maysan",
@@ -57,13 +57,13 @@ const liveProducts = [
       "Real-time academic performance analytics",
       "Advanced biometric and dynamic attendance tracking"
     ],
-    imageUrl: "/og-image.webp",
+    imageUrl: "/edu_maysan.png?v=3",
     iframeUrl: "https://edumaysan.maysanlabs.com/",
     ctaHref: "/products/edu-maysan",
     ctaText: "Explore Product Details",
     secondaryCtaText: "Launch Live Site",
     secondaryCtaHref: "https://edumaysan.maysanlabs.com/",
-    scrollPercentage: "50%"
+    scrollPercentage: "0%"
   }
 ];
 

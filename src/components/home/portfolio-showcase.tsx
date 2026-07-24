@@ -130,7 +130,7 @@ export default function PortfolioShowcase({
           <div className="relative aspect-[16/10] bg-[#0c0c0c] rounded-t-xl overflow-hidden border border-white/10 shadow-2xl">
             
             {/* Screen Inner Glass Area */}
-            <div className="absolute inset-[3%] bg-[#121212] rounded-md overflow-hidden relative">
+            <div className="absolute inset-[3%] bg-[#121212] rounded-md overflow-hidden">
               
               {/* Floating Glassmorphic Interactive Sandbox Toggle */}
               {iframeUrl && (
@@ -161,17 +161,16 @@ export default function PortfolioShowcase({
                 <div className="w-full h-full relative overflow-hidden">
                   <div 
                     style={{ '--scroll-translate': `-${scrollPercentage}` } as React.CSSProperties}
-                    className="w-full h-auto absolute top-0 left-0 transition-transform duration-[4500ms] ease-in-out transform translate-y-0 group-hover:translate-y-[var(--scroll-translate)]"
+                    className={`w-full absolute top-0 left-0 transition-transform duration-[4500ms] ease-in-out transform translate-y-0 group-hover:translate-y-[var(--scroll-translate)] ${
+                      scrollPercentage === "0%" ? "h-full flex items-center justify-center" : "h-auto"
+                    }`}
                   >
-                    <Image 
+                    <img 
                       src={imageUrl} 
                       alt={`${title} product interface preview`}
-                      width={1200}
-                      height={1600}
-                      sizes="(max-width: 768px) 100vw, 60vw"
-                      placeholder="blur"
-                      blurDataURL="data:image/webp;base64,UklGRlYAAABXRUJQVlA4WAoAAAAQAAAAJQAJUAoAAAMR0RQgACD+/BkAg/38AgA="
-                      className="w-full h-auto object-cover object-top"
+                      className={`w-full ${
+                        scrollPercentage === "0%" ? "h-full object-fill" : "h-auto object-cover object-top"
+                      }`}
                     />
                   </div>
                 </div>

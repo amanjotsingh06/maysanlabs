@@ -206,7 +206,7 @@ export default function RootLayout({
           }}
         />
       </head>
-        <body className="bg-[var(--bg-base)] text-foreground font-sans">
+        <body className="bg-[var(--bg-base)] text-foreground font-sans" suppressHydrationWarning>
           <a href="#main-content" className="skip-link">
             Skip to content
           </a>
