@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import { Star, Pause, Play } from "lucide-react";
 
 const testimonials = [
   {
@@ -50,16 +50,8 @@ export default function Testimonials() {
     setCurrent((c) => (c + 1) % testimonials.length);
   }, []);
 
-  const prev = useCallback(() => {
-    setDirection(-1);
-    setCurrent((c) => (c - 1 + testimonials.length) % testimonials.length);
-  }, []);
 
-  useEffect(() => {
-    if (isPaused) return;
-    const timer = setInterval(next, 5000);
-    return () => clearInterval(timer);
-  }, [isPaused, next]);
+
 
   const t = testimonials[current];
 
@@ -113,7 +105,7 @@ export default function Testimonials() {
                 className="w-full bg-[var(--surface-elevated)] border border-[var(--border-subtle)] rounded-2xl p-8 md:p-10 shadow-lg"
               >
                 <div className="flex gap-0.5 mb-4">
-                  {[...Array(5)].map((_, i) => (
+                  {Array.from({ length: 5 }).map((_, i) => (
                     <Star key={i} size={14} className="text-brand-primary fill-brand-primary" />
                   ))}
                 </div>
@@ -145,44 +137,52 @@ export default function Testimonials() {
             </AnimatePresence>
           </div>
 
-          <div className="flex items-center justify-center gap-4 mt-6">
-            <button
-              onClick={prev}
-              aria-label="Previous testimonial"
-              className="w-9 h-9 rounded-full bg-white/[0.03] border border-white/[0.06] flex items-center justify-center text-foreground/50 hover:text-foreground hover:border-white/20 hover:bg-white/[0.06] transition-all"
-            >
-              <ChevronLeft size={16} />
-            </button>
-
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center mt-8 relative">
+            <style>{`
+              @keyframes slide-progress {
+                from { transform: scaleX(0); }
+                to { transform: scaleX(1); }
+              }
+            `}</style>
+            <div className="flex items-center gap-1">
               {testimonials.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => goTo(i)}
                   aria-label={`Go to testimonial ${i + 1}`}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    i === current
-                      ? "w-6 bg-brand-primary"
-                      : "w-1.5 bg-white/[0.12] hover:bg-white/[0.2]"
-                  }`}
-                />
+                  className="min-w-0 min-h-0 p-2 flex items-center justify-center group outline-none"
+                >
+                  <div
+                    className={`relative h-1.5 rounded-full overflow-hidden transition-all duration-500 ease-out bg-foreground/20 ${
+                      i === current
+                        ? "w-8"
+                        : "w-1.5 group-hover:bg-foreground/40"
+                    }`}
+                  >
+                    {i === current && (
+                      <div
+                        key={`progress-${current}`}
+                        className="absolute top-0 left-0 h-full w-full bg-foreground/80 rounded-full origin-left"
+                        style={{
+                          animation: `slide-progress 5000ms linear forwards`,
+                          animationPlayState: isPaused ? "paused" : "running",
+                        }}
+                        onAnimationEnd={() => {
+                          if (!isPaused) next();
+                        }}
+                      />
+                    )}
+                  </div>
+                </button>
               ))}
             </div>
 
             <button
-              onClick={next}
-              aria-label="Next testimonial"
-              className="w-9 h-9 rounded-full bg-white/[0.03] border border-white/[0.06] flex items-center justify-center text-foreground/50 hover:text-foreground hover:border-white/20 hover:bg-white/[0.06] transition-all"
-            >
-              <ChevronRight size={16} />
-            </button>
-
-            <button
               onClick={() => setIsPaused((p) => !p)}
               aria-label={isPaused ? "Resume auto-play" : "Pause auto-play"}
-              className="w-9 h-9 rounded-full bg-white/[0.03] border border-white/[0.06] flex items-center justify-center text-foreground/30 hover:text-foreground hover:border-white/20 transition-all ml-2"
+              className="absolute right-0 flex items-center justify-center w-8 h-8 min-w-0 min-h-0 rounded-full border border-foreground/10 text-foreground/40 hover:text-foreground/80 hover:bg-foreground/5 transition-all"
             >
-              {isPaused ? <Play size={12} /> : <Pause size={12} />}
+              {isPaused ? <Play size={10} fill="currentColor" className="ml-0.5" /> : <Pause size={10} fill="currentColor" />}
             </button>
           </div>
         </div>
