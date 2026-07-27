@@ -178,6 +178,10 @@ export default function SiteCheckerClient({ initialUrl }: { initialUrl?: string 
         setHistory(prev => [newRecord, ...prev].slice(0, MAX_HISTORY));
 
         setTimeout(() => {
+          setShowLeadForm(true);
+        }, 2000);
+
+        setTimeout(() => {
           resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
         }, 100);
       }, 400);
@@ -220,7 +224,7 @@ export default function SiteCheckerClient({ initialUrl }: { initialUrl?: string 
       if (res.ok) {
         setLeadCaptured(true);
         window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: "tool_lead", tool: "site-checker", email: email.trim().toLowerCase() });
+        window.dataLayer.push({ event: "tool_lead", tool: "site-checker" });
       } else { const d = await res.json(); setLeadError(d.error || "Something went wrong."); }
     } catch { setLeadError("Network error. Please try again."); }
     finally { setLeadSubmitting(false); }
@@ -461,6 +465,14 @@ export default function SiteCheckerClient({ initialUrl }: { initialUrl?: string 
                         <button onClick={copyResults} className="bg-white/80 dark:bg-white/[0.05] border border-gray-200 dark:border-white/10 text-foreground px-6 py-3 rounded-full font-semibold text-sm hover:bg-gray-100 dark:hover:bg-white/[0.08] transition-colors flex items-center gap-2">
                           {copied ? <><CheckCircle size={14} className="text-green-500" /> Copied</> : <><Share2 size={14} /> Share Report</>}
                         </button>
+                        {perfResults && (
+                          <button
+                            onClick={() => setShowLeadForm(true)}
+                            className="bg-white/80 dark:bg-white/[0.05] border border-gray-200 dark:border-white/10 text-foreground px-6 py-3 rounded-full font-semibold text-sm hover:bg-gray-100 dark:hover:bg-white/[0.08] transition-colors flex items-center gap-2"
+                          >
+                            <FileText size={14} /> Download PDF Report
+                          </button>
+                        )}
                       </div>
                     </div>
 

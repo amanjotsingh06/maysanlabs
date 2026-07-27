@@ -44,6 +44,12 @@ function createTransporter() {
 }
 
 export async function POST(request: NextRequest) {
+  const origin = request.headers.get('origin') || request.headers.get('referer') || '';
+  const allowedOrigins = ['https://maysanlabs.com', 'http://localhost:3000', 'http://localhost:3001'];
+  if (origin && !allowedOrigins.some(o => origin.startsWith(o))) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   if (isRateLimited(ip)) {
     return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });

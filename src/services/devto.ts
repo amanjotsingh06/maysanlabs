@@ -1,3 +1,4 @@
+import { safeFetch } from "@/core/security/ssrf";
 import { BlogPost } from "@/data/blog";
 
 interface DevToArticle {
@@ -15,8 +16,7 @@ interface DevToArticle {
 
 export async function fetchExternalTechBlogs(): Promise<BlogPost[]> {
   try {
-    const res = await fetch("https://dev.to/api/articles?tag=technology&per_page=12", {
-      next: { revalidate: 3600 }, // Cache response for 1 hour
+    const res = await safeFetch("https://dev.to/api/articles?tag=technology&per_page=12", {
       headers: {
         "User-Agent": "MaysanLabs-TechNews-Client",
       },

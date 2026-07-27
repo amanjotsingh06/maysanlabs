@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit } from "@/core/rate-limit";
+import { safeFetch } from "@/core/security/ssrf";
 import type { WebVitalResult } from "@/types/pagespeed";
 
 const cacheMap = new Map<string, { data: unknown; expiry: number }>();
 const CACHE_TTL_MS = 5 * 60 * 1000;
 
 export async function POST(request: NextRequest) {
+  const origin = request.headers.get('origin') || request.headers.get('referer') || '';
+  const allowedOrigins = ['https://maysanlabs.com', 'http://localhost:3000', 'http://localhost:3001'];
+  if (origin && !allowedOrigins.some(o => origin.startsWith(o))) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   const rateCheck = checkRateLimit(`pagespeed:${ip}`, 10, 60 * 1000);
   if (!rateCheck.allowed) {
@@ -44,9 +51,9 @@ export async function POST(request: NextRequest) {
 
     // Multi-category Lighthouse scans via PageSpeed API are intensive and frequently take 20-35s.
     // Set a robust timeout (90s) to allow slow Google server responses without timing out.
-    const psiRes = await fetch(
+    const psiRes = await safeFetch(
       `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?${params}`,
-      { signal: AbortSignal.timeout(90000) }
+      { signal: AbortSignal.timeout(90000), maxMs: 90000 }
     );
 
     if (!psiRes.ok) {

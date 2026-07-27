@@ -63,7 +63,7 @@ export default function MultiStepForm() {
       if (result.success) {
         setIsSubmitted(true);
         window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: "project_form_submit", projectType: formData.projectType, budget: formData.budget, email: formData.email.trim().toLowerCase(), phone: formData.phone.replace(/[\s+\-()]/g, "") });
+        window.dataLayer.push({ event: "project_form_submit", projectType: formData.projectType, budget: formData.budget });
       } else {
         setError(result.message || "Something went wrong. Please try again.");
         if ("error" in result && result.error) {

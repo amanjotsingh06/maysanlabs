@@ -81,7 +81,7 @@ export default function CookieConsent() {
             <button
               type="button"
               onClick={handleDecline}
-              className="flex-1 rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-foreground/70 transition-all duration-200 hover:bg-white/10 focus-ring active:scale-[0.97]"
+              className="flex-1 rounded-full border border-white/20 bg-white/10 px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-foreground/80 transition-all duration-200 hover:bg-white/15 focus-ring active:scale-[0.97]"
             >
               Decline
             </button>

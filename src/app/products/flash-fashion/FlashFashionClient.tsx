@@ -77,7 +77,7 @@ export default function FlashFashionClient() {
             </p>
 
             <div className="flex flex-wrap gap-4">
-              <Link href="http://flashhfashion.in/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-8 py-4 bg-brand-primary text-white rounded-full font-semibold hover:bg-brand-primary/90 transition-colors">
+              <Link href="https://flashhfashion.in/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-8 py-4 bg-brand-primary text-white rounded-full font-semibold hover:bg-brand-primary/90 transition-colors">
                 Launch Live Store <ArrowUpRight size={16} />
               </Link>
               <Link href="/case-studies/flash-fashion-ecommerce" className="inline-flex items-center gap-2 px-8 py-4 bg-white/80 dark:bg-white/[0.05] border border-gray-200 dark:border-white/10 text-foreground rounded-full font-semibold hover:bg-white dark:hover:bg-white/[0.08] transition-colors">

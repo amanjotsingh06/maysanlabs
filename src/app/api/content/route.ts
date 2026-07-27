@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { safeFetch, assertSafeFetchUrl } from "@/core/security/ssrf";
 
 const CRON_SECRET = process.env.CRON_SECRET;
 
@@ -22,7 +23,8 @@ export async function GET(request: Request) {
 
   const results = await Promise.allSettled(
     contentSources.map(async source => {
-      const res = await fetch(source.url, {
+      const safeUrl = await assertSafeFetchUrl(source.url);
+const res = await safeFetch(safeUrl.toString(), {
         headers: { 'User-Agent': 'MaysanLabs-ContentBot/1.0' },
       });
       if (!res.ok) throw new Error(`${source.name} returned ${res.status}`);
@@ -41,7 +43,7 @@ export async function GET(request: Request) {
   const deployHook = process.env.VERCEL_DEPLOY_HOOK_URL;
   if (deployHook) {
     try {
-      await fetch(deployHook, { method: 'POST' });
+      await safeFetch(deployHook, { method: 'POST' });
     } catch {
       // Deploy hook notification is best-effort
     }
@@ -51,8 +53,8 @@ export async function GET(request: Request) {
   const sitemapUrl = `${siteUrl}/sitemap.xml`;
   try {
     await Promise.allSettled([
-      fetch(`https://www.google.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`),
-      fetch('https://api.indexnow.org/indexnow', {
+      safeFetch(`https://www.google.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`),
+      safeFetch('https://api.indexnow.org/indexnow', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

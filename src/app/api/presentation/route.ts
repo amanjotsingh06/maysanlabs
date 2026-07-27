@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { safeFetch } from "@/core/security/ssrf";
 
 const PRESENTATION_SYSTEM_PROMPT = `You are the core Presentation Intelligence Engine for Maysan Labs. Your single responsibility is to act as a structured data parser. You take unstructured raw data, business reports, or legacy code formats (like ReportLab PDF definitions) and map them into a flawless JSON schema that builds high-end, professional 16:9 widescreen presentations.
 
@@ -124,6 +125,12 @@ const MODEL = process.env.AI_MODEL || "gpt-4o-mini";
 
 export async function POST(request: Request) {
   try {
+    const origin = request.headers.get('origin') || request.headers.get('referer') || '';
+    const allowedOrigins = ['https://maysanlabs.com', 'http://localhost:3000', 'http://localhost:3001'];
+    if (origin && !allowedOrigins.some(o => origin.startsWith(o))) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
     const { rawData } = await request.json();
 
     if (!rawData || typeof rawData !== "string" || rawData.trim().length === 0) {
@@ -140,7 +147,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const response = await fetch(API_URL, {
+    const response = await safeFetch(API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

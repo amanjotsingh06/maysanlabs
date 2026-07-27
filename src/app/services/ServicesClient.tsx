@@ -10,7 +10,9 @@ import {
   Cloud,
   Workflow,
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  Mail,
+  FileText
 } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -57,6 +59,27 @@ const services = [
     icon: Sparkles,
     color: "from-green-500 to-emerald-400",
     href: "/services/ai",
+  },
+  {
+    title: "Medusa E-Commerce",
+    desc: "Custom headless commerce platforms built on Medusa.js for high-growth brands.",
+    icon: ShoppingCart,
+    color: "from-purple-500 to-pink-400",
+    href: "/services/medusa-ecommerce",
+  },
+  {
+    title: "Email Infrastructure",
+    desc: "Self-hosted SMTP, DKIM/SPF setup, and campaign automation with zero recurring fees.",
+    icon: Mail,
+    color: "from-blue-500 to-indigo-400",
+    href: "/services/email-infrastructure",
+  },
+  {
+    title: "GST Billing Automation",
+    desc: "Automated GST invoicing, e-way bills, and WhatsApp integration for Indian businesses.",
+    icon: FileText,
+    color: "from-emerald-500 to-teal-400",
+    href: "/services/gst-billing-automation",
   },
 ];
 
@@ -118,7 +141,7 @@ export default function ServicesClient() {
                 <p className="text-foreground/45 text-sm leading-relaxed mb-5 group-hover:text-foreground/60 transition-colors duration-300">
                   {service.desc}
                 </p>
-                <Link href={service.href} className="flex items-center gap-1.5 text-brand-primary text-xs font-semibold uppercase tracking-wider group-hover:gap-2.5 transition-all">
+                <Link href={service.href} className="flex items-center gap-1.5 text-brand-primary text-xs font-semibold uppercase tracking-wider group-hover:gap-2.5 transition-all" aria-label={`Learn more about ${service.title}`}>
                   <span>Learn more</span>
                   <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
                 </Link>

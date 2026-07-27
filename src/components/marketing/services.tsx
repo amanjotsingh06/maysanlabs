@@ -135,6 +135,7 @@ export default function Services() {
                     </ul>
                     <Link
                       href={service.href}
+                      aria-label={`Learn more about ${service.title}`}
                       className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-primary hover:gap-2.5 transition-all"
                     >
                       Learn more <ArrowUpRight size={12} />

@@ -65,7 +65,7 @@ export default function ExitIntentPopup() {
     }
     setSubmitted(true);
     window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({ event: "exit_intent_signup", email: email.trim().toLowerCase() });
+    window.dataLayer.push({ event: "exit_intent_signup" });
   };
 
   if (!isVisible) return null;

@@ -22,6 +22,7 @@ const ROUTE_CONFIG: Record<string, { priority: number; changeFrequency: Metadata
   '/products':     { priority: 0.9, changeFrequency: 'weekly' },
   '/products/edu-maysan': { priority: 0.8, changeFrequency: 'monthly' },
   '/products/flash-fashion': { priority: 0.8, changeFrequency: 'monthly' },
+  '/products/maysanmails': { priority: 0.8, changeFrequency: 'monthly' },
   '/pricing':      { priority: 0.8, changeFrequency: 'weekly' },
   '/privacy':      { priority: 0.3, changeFrequency: 'yearly' },
   '/terms':        { priority: 0.3, changeFrequency: 'yearly' },
@@ -44,9 +45,9 @@ const DEFAULT_CONFIG = { priority: 0.6, changeFrequency: 'monthly' as const }
 // Map routes to their layout/data dependency files so their lastmod updates automatically
 const ROUTE_DEPENDENCIES: Record<string, string[]> = {
   '/': ['src/app/page.tsx', 'src/app/layout.tsx', 'next.config.js'],
-  '/careers': ['src/app/careers/page.tsx', 'src/app/careers/layout.tsx', 'src/lib/careers-data.ts', 'src/app/layout.tsx'],
-  '/blog': ['src/app/blog/page.tsx', 'src/lib/blog-data.ts', 'src/app/layout.tsx'],
-  '/case-studies': ['src/app/case-studies/page.tsx', 'src/lib/case-studies-data.ts', 'src/app/layout.tsx'],
+  '/careers': ['src/app/careers/page.tsx', 'src/app/careers/layout.tsx', 'src/data/careers.ts', 'src/app/layout.tsx'],
+  '/blog': ['src/app/blog/page.tsx', 'src/data/blog.ts', 'src/app/layout.tsx'],
+  '/case-studies': ['src/app/case-studies/page.tsx', 'src/data/case-studies.ts', 'src/app/layout.tsx'],
   '/services': ['src/app/services/page.tsx', 'src/app/layout.tsx'],
   '/products': ['src/app/products/page.tsx', 'src/app/layout.tsx'],
   '/about': ['src/app/about/page.tsx', 'src/app/layout.tsx'],
@@ -147,7 +148,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes = discoverRoutes(appDir)
 
   // Add dynamic blog routes
-  blogPosts.forEach(post => {
+  blogPosts.filter(post => !post.draft).forEach(post => {
     routes.push({
       url: `${BASE_URL}/blog/${post.slug}`,
       lastModified: new Date(post.date),
@@ -171,6 +172,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const productRoutes = [
     { slug: 'flash-fashion', name: 'Maysan Shop', lastmod: new Date('2025-01-01') },
     { slug: 'edu-maysan', name: 'Edu-Maysan', lastmod: new Date('2025-01-01') },
+    { slug: 'maysanmails', name: 'MaysanMails', lastmod: new Date('2025-01-01') },
   ]
   productRoutes.forEach(p => {
     routes.push({

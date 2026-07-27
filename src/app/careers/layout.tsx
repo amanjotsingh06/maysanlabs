@@ -26,7 +26,7 @@ export default function CareersLayout({
     "@type": "JobPosting",
     title: job.title,
     description: job.description,
-    datePosted: "2024-03-20", // Ideally this comes from data
+    datePosted: "2024-03-20",
     validThrough: "2025-03-20",
     employmentType:
       job.type === "Full-time"

@@ -121,6 +121,7 @@ export default function Products() {
 
                   <Link
                     href={product.link}
+                    aria-label={`Learn more about ${product.name}`}
                     className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-primary hover:gap-2.5 transition-all mt-auto"
                   >
                     Learn more <ArrowUpRight size={12} />

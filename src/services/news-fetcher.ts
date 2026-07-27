@@ -1,3 +1,5 @@
+import { safeFetch } from "@/core/security/ssrf";
+
 export interface NewsItem {
   title: string;
   source: string;
@@ -27,8 +29,7 @@ interface DevToArticle {
 export async function fetchTechNewsServer(): Promise<NewsItem[]> {
   try {
     const results = await Promise.allSettled([
-      fetch('https://hn.algolia.com/api/v1/search?query=software+development&tags=story&hitsPerPage=8', {
-        next: { revalidate: 3600 },
+      safeFetch('https://hn.algolia.com/api/v1/search?query=software+development&tags=story&hitsPerPage=8', {
         headers: { 'User-Agent': 'MaysanLabs-TechNews-Client' }
       })
         .then(r => r.json())
@@ -39,8 +40,7 @@ export async function fetchTechNewsServer(): Promise<NewsItem[]> {
           published: h.created_at,
           category: 'Technology'
         })) || []),
-      fetch('https://dev.to/api/articles?tag=software&per_page=6', {
-        next: { revalidate: 3600 },
+      safeFetch('https://dev.to/api/articles?tag=software&per_page=6', {
         headers: { 'User-Agent': 'MaysanLabs-TechNews-Client' }
       })
         .then(r => r.json())

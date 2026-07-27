@@ -25,7 +25,7 @@ export default function Newsletter() {
         setSubscribed(true);
         setEmail("");
         window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: "newsletter_signup", email: email.trim().toLowerCase() });
+        window.dataLayer.push({ event: "newsletter_signup" });
       } else {
         setError(data.error || "Something went wrong.");
       }

@@ -3,6 +3,7 @@
 import nodemailer from "nodemailer";
 import { headers } from "next/headers";
 import { checkRateLimit } from "@/core/rate-limit";
+import { safeFetch } from "@/core/security/ssrf";
 import { escapeHtml, textForEmail, multilineHtml } from "@/core/security/escape";
 
 export async function sendEmail(formData: FormData) {
@@ -86,7 +87,7 @@ export async function sendEmail(formData: FormData) {
 
     // 2. Send Discord Notification (if configured)
     if (process.env.DISCORD_WEBHOOK_URL) {
-      const discordPromise = fetch(process.env.DISCORD_WEBHOOK_URL, {
+      const discordPromise = safeFetch(process.env.DISCORD_WEBHOOK_URL as string, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

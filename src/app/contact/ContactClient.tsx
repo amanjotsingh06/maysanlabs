@@ -41,7 +41,7 @@ export default function ContactClient() {
       if (result.success) {
         setIsSubmitted(true);
         window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: "contact_form_submit", email: formData.email.trim().toLowerCase() });
+        window.dataLayer.push({ event: "contact_form_submit" });
       } else setError(result.message || "Something went wrong.");
     } catch {
       setError("Failed to send message. Please try again.");

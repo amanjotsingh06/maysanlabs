@@ -77,6 +77,7 @@ export default function Problem() {
               >
                 <Link
                   href={arch.href}
+                  aria-label={`Learn more about ${arch.title}`}
                   className="group relative flex flex-col h-full rounded-2xl border border-gray-100 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] p-6 hover:-translate-y-1 hover:shadow-lg hover:border-brand-primary/20 transition-all duration-300 overflow-hidden"
                 >
                   {/* Gradient wash on hover */}

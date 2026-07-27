@@ -1,5 +1,6 @@
 import satori from "satori";
 import sharp from "sharp";
+import { safeFetch } from "@/core/security/ssrf";
 
 let fontRegular: Buffer | null = null;
 let fontBold: Buffer | null = null;
@@ -9,15 +10,15 @@ async function getFont(weight: number): Promise<Buffer> {
   if (cached) return cached;
 
   try {
-    const cssRes = await fetch(
+    const cssRes = await safeFetch(
       `https://fonts.googleapis.com/css2?family=Outfit:wght@${weight}&display=swap`,
-      { signal: AbortSignal.timeout(5000) }
+      { signal: AbortSignal.timeout(5000), maxMs: 5000 }
     );
     if (!cssRes.ok) throw new Error(`Google Fonts CSS returned ${cssRes.status}`);
     const css = await cssRes.text();
     const match = css.match(/url\(([^)]+)\)/);
     if (!match) throw new Error("Font URL not found");
-    const fontRes = await fetch(match[1], { signal: AbortSignal.timeout(5000) });
+    const fontRes = await safeFetch(match[1], { signal: AbortSignal.timeout(5000), maxMs: 5000 });
     if (!fontRes.ok) throw new Error(`Font file returned ${fontRes.status}`);
     const data = Buffer.from(await fontRes.arrayBuffer());
 
@@ -33,9 +34,11 @@ async function getFont(weight: number): Promise<Buffer> {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const title = searchParams.get("title") || "Maysan Labs";
+  const sanitize = (str: string, maxLen: number) =>
+    str.replace(/<[^>]*>/g, '').replace(/[<>"'&]/g, '').slice(0, maxLen);
+  const title = sanitize(searchParams.get("title") || "Maysan Labs", 120);
   const description =
-    searchParams.get("description") || "Enterprise SaaS Development Company";
+    sanitize(searchParams.get("description") || "Enterprise SaaS Development Company", 300);
 
   const [font400, font700] = await Promise.all([
     getFont(400),

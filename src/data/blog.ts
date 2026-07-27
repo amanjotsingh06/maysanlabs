@@ -917,4 +917,130 @@ The key is to start small and iterate. Focus on solving one problem well rather 
 
 As the ecosystem matures, we expect to see more standardized approaches emerge, making it easier for teams to adopt best practices without reinventing the wheel.`,
   },
+
+  {
+    title: "Next.js vs Traditional Monolith for Enterprise Portals",
+    slug: "nextjs-vs-monolith-enterprise",
+    excerpt: "A technical comparison of Next.js App Router against traditional monolithic frameworks for enterprise portals — SSR, ISR, edge rendering, and when each architecture makes sense.",
+    date: "2026-07-28",
+    author: "Maysan Engineering Team",
+    category: "Architecture",
+    readTime: "6 min",
+    tags: ["Next.js", "Monolith", "Enterprise", "Architecture"],
+    content: `The debate between Next.js and traditional monolithic architectures for enterprise portals is not about which is universally better — it is about which trade-offs align with your specific product constraints. Let's walk through the technical dimensions that matter.
+
+Next.js App Router introduces a fundamentally different rendering model. With React Server Components, you can stream HTML progressively, colocate data fetching with rendering, and let the framework decide between static generation (SSG), server-side rendering (SSR), and incremental static regeneration (ISR) on a per-route basis. For enterprise portals with thousands of pages — documentation hubs, partner portals, internal dashboards — ISR means your content stays fresh without rebuilding the entire site.
+
+Traditional monolithic frameworks like Rails, Django, or Laravel take a simpler approach: every request hits the server, the framework renders HTML fully, and the response is sent. This model is predictable, well-understood, and for many CRUD-heavy applications, entirely sufficient. The cost is that every page load requires a full round-trip, and scaling requires adding more server capacity rather than pushing work to the edge.
+
+Edge rendering in Next.js shifts compute to Cloudflare Workers or Vercel Edge Functions, placing rendered content geographically closer to users. For globally distributed enterprise teams, this can cut TTFB by 200-400ms compared to a single-region monolith deployment. However, edge functions have constraints — no direct database access, limited execution time — which means complex data operations still need to be proxied to a backend.
+
+Where monoliths still win is operational simplicity. A Rails monolith deploys as a single artifact, has one codebase, one set of logs, one deployment pipeline. Next.js applications often involve a frontend, a backend API, a database, and potentially a separate edge configuration — more moving parts, more things to monitor, more surface area for failure.
+
+The right choice depends on your team's maturity and your product's requirements. If you have a small team building a well-understood domain model, a monolith will ship faster and be easier to maintain. If you are building a content-rich portal that needs global performance, SEO depth, and the ability to incrementally adopt new features without redeploying the entire application, Next.js App Router is the stronger foundation.
+
+We recommend a pragmatic hybrid: start with a monolith API layer (Node.js, Rails, or Django) and use Next.js as the presentation layer. This gives you the operational simplicity of a single backend with the rendering flexibility of Next.js. As your portal grows, you can extract services from the monolith without rewriting the frontend.`,
+  },
+
+  {
+    title: "How to Replace Legacy Excel Workflows with Automated Dashboards",
+    slug: "replace-excel-with-automated-dashboards",
+    excerpt: "A practical guide to migrating from spreadsheet-based operations to automated web dashboards with real-time data, shared access, and scheduled reporting.",
+    date: "2026-07-28",
+    author: "Maysan Engineering Team",
+    category: "Transformation",
+    readTime: "5 min",
+    tags: ["Excel", "Automation", "Dashboards", "Digital Transformation"],
+    content: `Excel remains the most widely used business application in the world, and for good reason: it is flexible, familiar, and requires no engineering support to start using. But every spreadsheet-based workflow eventually hits a ceiling where automation and shared access become critical. Here is how to plan the migration.
+
+The first step is to inventory your spreadsheet ecosystem. Most organizations have a handful of critical spreadsheets — financial models, inventory trackers, sales pipelines, project timelines — alongside dozens of ad-hoc sheets used by individual teams. Not all of them need to be replaced. Focus on the ones where multiple people need to edit simultaneously, where data needs to be refreshed regularly, or where errors in formulas have caused real business problems.
+
+An automated dashboard replaces manual data entry with database-backed updates. Instead of emailing an updated spreadsheet every Friday, you connect your CRM, accounting software, or operational database directly to a web-based dashboard. Data refreshes automatically on a schedule, and every stakeholder sees the same numbers at the same time.
+
+The architecture is straightforward: a database (PostgreSQL or MySQL) stores the source data, a backend service (Node.js, Python, or Ruby) handles ETL from your source systems, and a frontend (Next.js with a charting library like Recharts or Tremor) visualises the data. For read-only dashboards, you can even skip the backend entirely and query the database directly from Next.js server components.
+
+Real-time data does not always mean WebSocket connections. For most business dashboards, periodic polling every 5-15 minutes is sufficient. Reserve real-time updates for time-sensitive operations like monitoring production systems or tracking live sales data. This simplifies your infrastructure significantly — a cron job or scheduled serverless function can populate a materialized view that your dashboard queries.
+
+One common mistake is trying to replicate every Excel feature in the dashboard. Pivot tables, conditional formatting, and arbitrary cell references are powerful because they are unconstrained. A well-designed dashboard constrains user actions to the operations that actually matter: filtering by date range, viewing drill-downs, exporting to CSV. Accept that some analytical flexibility will be lost in exchange for correctness and shared access.
+
+The migration itself should be incremental. Run the dashboard alongside the existing spreadsheet for at least two reporting cycles. Compare outputs, gather feedback, and iterate before declaring the spreadsheet deprecated. This builds trust and ensures the dashboard captures all the edge cases that the spreadsheet had accumulated over years of use.`,
+  },
+
+  {
+    title: "Migrating from Shopify to Medusa Headless Commerce: A Technical Guide",
+    slug: "shopify-to-medusa-migration-guide",
+    excerpt: "A detailed technical guide to migrating from Shopify to Medusa.js headless commerce — covering data export, API mapping, storefront rebuild, and SEO preservation.",
+    date: "2026-07-29",
+    author: "Maysan Engineering Team",
+    category: "Architecture",
+    readTime: "8 min",
+    tags: ["Shopify", "Medusa.js", "Headless", "E-commerce"],
+    content: `Migrating from Shopify to Medusa.js is a significant architectural decision. Shopify is a proven platform with an extensive app ecosystem, but its limitations — platform fees, rigid checkout, limited customization — push growing brands toward headless alternatives. This guide walks through the technical migration process step by step.
+
+Phase 1: Data Export and Audit. Shopify's admin API provides access to products, customers, orders, collections, and metafields. Use the GraphQL Admin API to export your data in batches, paginating through all records. Pay special attention to metafields — Shopify stores a lot of custom data here that is easy to miss. Export your theme's Liquid templates as well; while they will not be used directly in Medusa, they document your storefront's structure and edge cases.
+
+Phase 2: Data Mapping and Transformation. Medusa's data model differs from Shopify's in key ways. Products in Shopify have variants; Medusa treats variants as first-class entities with their own inventory tracking. Collections in Shopify map to Collections in Medusa, but Medusa also supports custom product categories. Map your Shopify metafields to Medusa's custom data fields. This is the most labor-intensive part of the migration — budget at least 40% of your migration timeline here.
+
+Phase 3: Storefront Rebuild. The biggest benefit of moving to Medusa is a fully customizable storefront. You can use Next.js Commerce as a starting template, which provides SEO-optimized product pages, cart, and checkout out of the box. Rebuild your product listing pages, category navigation, search functionality, and custom pages. Medusa's plugin system handles payment (Stripe, Razorpay), shipping, and fulfillment — configure these during the storefront build rather than after.
+
+Phase 4: SEO Preservation. Changing your e-commerce platform risks losing search rankings if not handled carefully. Before going live, map every existing Shopify URL to its new Medusa URL structure. Shopify uses /products/{handle} and /collections/{handle}; Medusa can match this exactly. Set up 301 redirects for any URL that changes. Export your Shopify sitemap and compare it against the new Medusa sitemap to ensure every page is accounted for. Maintain the same product schema.org markup structure to preserve rich results.
+
+Phase 5: Data Migration and Validation. Run a trial migration to a staging environment first. Compare product counts, order histories, customer records, and inventory levels between Shopify and Medusa. Validate pricing — including compare-at prices, tiered pricing, and currency conversions. Run automated tests that check every product page renders correctly, every variant is purchasable, and every discount code applies as expected.
+
+Phase 6: Cutover. Use Medusa's import functionality for the final data migration. Point your production domain to the new Medusa storefront. Keep Shopify active in read-only mode for 30 days to handle returns, exchanges, and edge cases that surface post-migration. Monitor your 404 rate, conversion rate, and page load speeds closely during this period.
+
+The entire migration typically takes 8-16 weeks depending on store complexity. The result is a storefront that loads 2-3x faster, has zero per-transaction platform fees, and can be extended arbitrarily through Medusa's plugin architecture.`,
+  },
+
+  {
+    title: "Self-Hosted Email Infrastructure vs SaaS: Total Cost of Ownership Analysis",
+    slug: "self-hosted-email-vs-saas-tco",
+    excerpt: "A detailed cost analysis comparing self-hosted email infrastructure against SendGrid, Mailgun, and other ESPs over 1, 3, and 5 year horizons.",
+    date: "2026-07-29",
+    author: "Maysan Engineering Team",
+    category: "Infrastructure",
+    readTime: "7 min",
+    tags: ["Email", "SMTP", "Self-Hosted", "TCO"],
+    content: `Every business that sends email at scale eventually faces the build-versus-buy decision for email infrastructure. SaaS providers like SendGrid, Mailgun, and AWS SES offer convenience at a per-email price. Self-hosted solutions like Postfix, OpenSMTPD, or dedicated SMTP relays offer control at a fixed infrastructure cost. Let's examine the total cost of ownership over 1, 3, and 5 year horizons.
+
+Volume matters more than any other factor. At 10,000 emails per month, SaaS pricing ranges from free (SendGrid's Essentials tier) to about $20/month. Self-hosting at this volume costs roughly $25-35/month for a small VPS, IP address, and monitoring — making SaaS the clear winner at low volumes. The break-even point is around 500,000 to 1 million emails per month. At 1 million emails per month, SendGrid charges approximately $400/month on the Essentials plan and $650/month on the Pro plan. Self-hosting the same volume costs $60-80/month for infrastructure plus $100-200/month for IP reputation management tools.
+
+Year 1 comparison for 1M emails/month: SaaS costs $4,800-$7,800. Self-hosted setup costs $2,400-$4,200 including initial server setup, warmup period (typically 4-6 weeks of gradually increasing volume), and monitoring tooling. You save 40-50% in year one.
+
+Year 3 comparison: SaaS costs $14,400-$23,400 cumulative. Self-hosted costs $6,000-$10,800 cumulative — assuming no major infrastructure changes. The gap widens because SaaS pricing scales with volume while self-hosted infrastructure costs remain largely fixed. By year three, you save 55-65%.
+
+Year 5 comparison: SaaS costs $24,000-$39,000. Self-hosted costs $10,000-$18,000. The cumulative savings of $14,000-$21,000 over five years is significant enough to justify the upfront engineering investment for any business sending over 500K emails per month.
+
+But cost is only one dimension. Self-hosting gives you complete control over deliverability: you own the IP reputation, you choose which feedback loops to participate in, and you can optimize every aspect of your sending pattern. Commercial ESPs pool IP reputations across their customers, which means one bad actor on the same platform can affect your deliverability.
+
+The hidden costs of self-hosting include: engineering time for setup and maintenance (50-100 hours initial, 5-10 hours monthly), monitoring infrastructure (deliverability dashboards, bounce processing, feedback loop integration), and scaling overhead (adding IPs, managing warmup, handling blocklists). These are real costs that the simple infrastructure comparison does not capture.
+
+For most mid-market businesses, the optimal strategy is hybrid: use a self-hosted primary SMTP relay for transactional and bulk email, with a commercial ESP as a fallback for geographic regions where your self-hosted IPs have poor reputation or for time-sensitive campaigns where deliverability must be guaranteed. This gives you the cost benefits of self-hosting with the reliability safety net of a commercial provider.`,
+  },
+
+  {
+    title: "Building Scalable B2B SaaS Architecture on Next.js",
+    slug: "scalable-b2b-saas-architecture-nextjs",
+    excerpt: "Architecture patterns for B2B SaaS on Next.js — multi-tenancy strategies, API design, database isolation, caching, and deployment patterns that scale.",
+    date: "2026-07-30",
+    author: "Maysan Engineering Team",
+    category: "Architecture",
+    readTime: "7 min",
+    tags: ["Next.js", "SaaS", "Architecture", "B2B", "Scalability"],
+    content: `Building a B2B SaaS application on Next.js requires making foundational architecture decisions that will constrain or enable your product for years. The framework handles rendering and routing well, but multi-tenancy, data isolation, and API design patterns are decisions Next.js deliberately leaves to you.
+
+Multi-tenancy is the most consequential decision. The two primary approaches are database per tenant (isolated) and shared database with row-level tenant IDs (shared). Database per tenant offers strong isolation — a single noisy tenant cannot affect others — at the cost of operational complexity. You need to run migrations across N databases, manage connection pools for each, and handle per-tenant backups. Shared database is simpler to operate but requires every query to include a tenant_id filter, and a missing filter leaks data between tenants. For most B2B SaaS products with fewer than 500 tenants, database per tenant is the safer choice.
+
+Next.js server components change how you approach data fetching in a multi-tenant context. Since server components run on every request, they naturally support tenant-aware queries. A middleware function can extract the tenant from the subdomain or custom domain, attach it to the request context, and pass it down to server components. This eliminates the need for client-side tenant resolution entirely.
+
+API design for B2B SaaS should treat your Next.js API routes as a thin BFF (Backend for Frontend) layer that delegates to a separate service layer. This separation lets you evolve your API independently of your frontend and makes it straightforward to add a public API later. Use tRPC or Next.js route handlers with Zod validation for type-safe API contracts.
+
+Caching in a multi-tenant B2B app requires tenant-aware cache keys. Using Redis, prefix every cache key with the tenant ID. Incremental Static Regeneration (ISR) can be used for tenant-specific pages (like dashboards) but be careful — ISR shares the cache across all tenants. Tag your revalidation requests with the tenant ID so that purging one tenant's cache does not affect others.
+
+Database connection management deserves careful attention. B2B SaaS applications often have multiple data sources: the primary Postgres database, Redis for caching, Elasticsearch for search, and potentially a data warehouse for analytics. Use connection pooling at the infrastructure level (PgBouncer for Postgres) rather than in application code. Next.js serverless functions have connection limits that make direct connections from each invocation impractical.
+
+The deployment pattern matters as much as the code. For B2B SaaS, we recommend containerized deployment on AWS ECS or Google Cloud Run rather than serverless platforms like Vercel. Containerized deployments give you predictable cold start times, control over memory and CPU allocation, and the ability to run background job workers in the same environment. Use Vercel only for the marketing site and documentation — keep your authenticated application on infrastructure you control.
+
+Observability is not optional. Instrument your application with OpenTelemetry from day one. Trace every request across your service boundary — from the Next.js server component through the API route to the database query. B2B SaaS debugging inevitably involves tracing a specific tenant's request through the entire stack, and you cannot add observability after a production incident.`,
+  },
 ];

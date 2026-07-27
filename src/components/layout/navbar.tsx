@@ -116,7 +116,7 @@ export default function Navbar() {
             <div className="relative h-8 w-8 md:h-9 md:w-9 rounded-[2px] overflow-hidden flex items-center justify-center border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-brand-primary/30 group-hover:shadow-[0_0_15px_rgba(26,109,214,0.2)]">
               <Image 
                 src="/logo-rounded-v2.webp" 
-                alt="Maysan Labs"
+                alt=""
                 width={36}
                 height={36}
                 priority

@@ -27,14 +27,14 @@ import {
 const outfit = Outfit({
   variable: "--font-sans",
   subsets: ["latin"],
-  display: "optional",
+  display: "swap",
   weight: ["400", "500", "600", "700", "800"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
-  display: "optional",
+  display: "swap",
   weight: ["400", "500", "600", "700"],
 });
 
@@ -172,7 +172,7 @@ const WhatsAppButton = dynamic(() => import("@/components/ui/WhatsAppButton"));
 const ExitIntentPopup = dynamic(() => import("@/components/ui/ExitIntentPopup"));
 const CookieConsent = dynamic(() => import("@/components/tracking/cookie-consent"));
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -180,9 +180,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={cn("antialiased", outfit.variable, jetbrainsMono.variable)}>
 <head>
-        {/* Preconnect to critical third-party origins */}
-        <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
 
         {/* Combined JSON-LD structured data — single @graph for fewer script tags */}

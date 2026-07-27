@@ -3,6 +3,7 @@
 import nodemailer from "nodemailer";
 import { headers } from "next/headers";
 import { checkRateLimit } from "@/core/rate-limit";
+import { safeFetch } from "@/core/security/ssrf";
 import { escapeHtml, safeHref, textForEmail, multilineHtml } from "@/core/security/escape";
 import { validateResume, ResumeValidationError } from "@/core/security/resume";
 
@@ -127,7 +128,7 @@ export async function applyJob(formData: FormData) {
 
     // 2. Send Discord Notification
     if (process.env.DISCORD_WEBHOOK_URL) {
-      const discordPromise = fetch(process.env.DISCORD_WEBHOOK_URL, {
+      const discordPromise = safeFetch(process.env.DISCORD_WEBHOOK_URL as string, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

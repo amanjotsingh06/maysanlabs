@@ -19,23 +19,6 @@ const nextConfig = {
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
           { key: "X-Frame-Options", value: "SAMEORIGIN" },
           { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
-          {
-            key: "Content-Security-Policy",
-            value:
-              "default-src 'self'; " +
-              "script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com 'unsafe-inline' 'unsafe-eval'; " +
-              "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; " +
-               "img-src 'self' data: blob: https: https://www.googleadservices.com; " +
-              "font-src 'self' https://fonts.gstatic.com data:; " +
-               "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://adservice.google.com https://www.googleadservices.com https://ip-api.com https://ipwho.is https://www.googleapis.com https://fonts.googleapis.com http://localhost:*; " +
-              "frame-src 'self' https://www.googletagmanager.com https://td.doubleclick.net; " +
-              "frame-ancestors 'self'; " +
-              "base-uri 'self'; " +
-              "form-action 'self'; " +
-              "manifest-src 'self'; " +
-              "worker-src 'self'; " +
-              "upgrade-insecure-requests",
-          },
         ],
       },
       {

@@ -212,50 +212,6 @@ export const seoLandingPages: SeoLandingPage[] = [
   },
 
   {
-    slug: "next.js-developer-gurgaon",
-    roleName: "Next.js Developer",
-    title: "Hire Elite Next.js Developers in Gurgaon | Maysan Labs",
-    description: "Hire top-tier Next.js Developers in Gurgaon, India. Maysan Labs delivers high-performance, scalable software solutions for startups and enterprises. Contact us today.",
-    location: "Gurgaon, Haryana, India",
-    skills: [
-      "Expert-level Next.js Developer engineering",
-      "Performance optimization & Core Web Vitals",
-      "Clean code & testing best practices",
-      "Cloud-native deployment & CI/CD",
-      "Technical documentation & knowledge transfer"
-    ],
-    techStack: [      "Next.js",       "React",       "TypeScript",       "Tailwind CSS",       "Vercel",       "Node.js",       "PostgreSQL"],
-    features: [
-      {
-        title: "Enterprise Grade Performance",
-        desc: "Our Next.js Developers optimize every layer of your application stack for maximum speed and reliability.",
-      },
-      {
-        title: "Expert Vetted Talent",
-        desc: "Rigorously vetted Next.js Developers with proven experience delivering production-grade software.",
-      },
-      {
-        title: "Flexible Engagement Models",
-        desc: "Full-time dedication, managed squads, or project-based consulting tailored to your needs.",
-      }
-    ],
-    faqs: [
-      {
-        question: "Why hire Next.js Developers from Maysan Labs?",
-        answer: "Maysan Labs is a specialized software studio. Our engineers write clean, type-safe code following best practices, ensuring your project scales.",
-      },
-      {
-        question: "Do you offer dedicated full-time hiring?",
-        answer: "Yes, we offer dedicated full-time developers, managed product squads, and time-and-materials project consulting.",
-      },
-      {
-        question: "How do you ensure Next.js Developer quality?",
-        answer: "We follow OWASP guidelines, implement security best practices, and conduct regular code reviews to maintain high standards.",
-      }
-    ],
-  },
-
-  {
     slug: "next.js-developer-bangalore",
     roleName: "Next.js Developer",
     title: "Hire Elite Next.js Developers in Bangalore | Maysan Labs",
