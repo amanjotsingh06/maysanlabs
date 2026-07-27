@@ -7,6 +7,7 @@ import { Mail, MapPin, Phone, ArrowRight, CheckCircle, Send } from "lucide-react
 import { sendEmail } from "@/app/actions/sendEmail";
 import { generateBreadcrumbSchema } from "@/seo/helpers";
 import Navbar from "@/components/layout/navbar";
+import ContactFooter from "@/components/layout/footer";
 
 const contactSchema = {
   "@context": "https://schema.org",
@@ -290,6 +291,7 @@ export default function ContactClient() {
           </div>
         </div>
       </section>
+      <ContactFooter />
     </main>
   );
 }

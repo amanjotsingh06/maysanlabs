@@ -89,7 +89,7 @@ export function SchemaMarkupGraph({ hasSchema }: { hasSchema: boolean }) {
   "name": "Maysan Labs",
   "url": "https://maysanlabs.com",
   "logo": "https://maysanlabs.com/logo-rounded-v2.webp",
-  "sameAs": ["https://linkedin.com/company/maysanlabs"]
+  "sameAs": ["https://www.linkedin.com/company/maysanlabs"]
 }`,
     WebSite: `{
   "@context": "https://schema.org",

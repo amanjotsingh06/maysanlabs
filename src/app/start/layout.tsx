@@ -16,10 +16,6 @@ export const metadata: Metadata = {
   },
   alternates: { 
     canonical: "https://maysanlabs.com/start",
-    languages: {
-      en: "https://maysanlabs.com/start",
-      ar: "https://maysanlabs.com/ar/start",
-    },
   },
 };
 

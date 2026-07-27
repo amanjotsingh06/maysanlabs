@@ -91,7 +91,7 @@ export default function TeamSection() {
                 {member.bio}
               </p>
               <div className="flex gap-3">
-                <a href="https://linkedin.com/company/maysanlabs" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-white/[0.03] flex items-center justify-center text-foreground/40 hover:text-foreground hover:bg-brand-primary/10 hover:text-brand-primary transition-all">
+                <a href="https://www.linkedin.com/company/maysanlabs" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-white/[0.03] flex items-center justify-center text-foreground/40 hover:text-foreground hover:bg-brand-primary/10 hover:text-brand-primary transition-all">
                   <Linkedin size={16} />
                 </a>
                 <a href="mailto:business@maysanlabs.com" className="w-9 h-9 rounded-lg bg-white/[0.03] flex items-center justify-center text-foreground/40 hover:text-foreground hover:bg-brand-primary/10 hover:text-brand-primary transition-all">

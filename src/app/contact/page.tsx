@@ -23,6 +23,9 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "https://maysanlabs.com/contact",
+    languages: {
+      en: "https://maysanlabs.com/contact",
+    },
   },
 };
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { generateBreadcrumbSchema } from "@/seo/helpers";
 import Navbar from "@/components/layout/navbar";
+import ContactFooter from "@/components/layout/footer";
 
 const ogImage = (t: string, d?: string) =>
   `/api/og?title=${encodeURIComponent(t.slice(0, 100))}${d ? `&description=${encodeURIComponent(d.slice(0, 160))}` : ""}`;
@@ -61,6 +62,7 @@ export default function PrivacyPage() {
         </div>
         </div>
       </div>
+      <ContactFooter />
     </main>
   );
 }

@@ -186,7 +186,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     <p className="text-[13px] sm:text-sm text-foreground/60 leading-relaxed mb-3">
                       {post.author} is a technology expert at Maysan Labs specializing in {post.category.toLowerCase()} and building scalable software solutions for growing businesses.
                     </p>
-                    <a href="https://linkedin.com/company/maysanlabs" target="_blank" rel="noopener noreferrer" className="text-[12px] font-semibold text-brand-primary hover:underline inline-flex items-center gap-1">
+                    <a href="https://www.linkedin.com/company/maysanlabs" target="_blank" rel="noopener noreferrer" className="text-[12px] font-semibold text-brand-primary hover:underline inline-flex items-center gap-1">
                       Connect on LinkedIn <ArrowRight size={12} />
                     </a>
                   </div>
