@@ -55,10 +55,10 @@ export function LeadForm({ leadCaptured, showLeadForm, setShowLeadForm, email, s
         </p>
         <form onSubmit={handleLeadSubmit} className="flex flex-col sm:flex-row gap-3">
           <div className="flex-1">
-            <input type="email" required placeholder="Business Email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full bg-white/80 dark:bg-white/[0.04] border border-gray-200 dark:border-white/[0.08] rounded-xl px-4 py-3 text-xs text-foreground placeholder:text-foreground/40 focus:border-brand-primary/50 focus:outline-none focus:ring-1 focus:ring-brand-primary/20" />
+            <input type="email" required aria-label="Email address" placeholder="Business Email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full bg-white/80 dark:bg-white/[0.04] border border-gray-200 dark:border-white/[0.08] rounded-xl px-4 py-3 text-xs text-foreground placeholder:text-foreground/40 focus:border-brand-primary/50 focus:outline-none focus:ring-1 focus:ring-brand-primary/20" />
           </div>
           <div className="flex-1">
-            <input type="text" required placeholder="Company Name" value={company} onChange={(e) => setCompany(e.target.value)} className="w-full bg-white/80 dark:bg-white/[0.04] border border-gray-200 dark:border-white/[0.08] rounded-xl px-4 py-3 text-xs text-foreground placeholder:text-foreground/40 focus:border-brand-primary/50 focus:outline-none focus:ring-1 focus:ring-brand-primary/20" />
+            <input type="text" required aria-label="Company name" placeholder="Company Name" value={company} onChange={(e) => setCompany(e.target.value)} className="w-full bg-white/80 dark:bg-white/[0.04] border border-gray-200 dark:border-white/[0.08] rounded-xl px-4 py-3 text-xs text-foreground placeholder:text-foreground/40 focus:border-brand-primary/50 focus:outline-none focus:ring-1 focus:ring-brand-primary/20" />
           </div>
           <button type="submit" disabled={leadSubmitting} className="px-5 py-3 bg-brand-primary hover:bg-brand-primary/90 transition-all font-bold text-xs uppercase tracking-wider text-white rounded-xl disabled:opacity-50 shrink-0">
             {leadSubmitting ? "Generating..." : "Get PDF Blueprint"}

@@ -119,14 +119,14 @@ export function SchemaMarkupGraph({ hasSchema }: { hasSchema: boolean }) {
           {hasSchema ? (
             <div className="flex flex-col items-center gap-6 relative">
               <span className="absolute top-6 bottom-6 w-px bg-white/10 z-0" />
-              <div onClick={() => setActiveSchema("WebSite")}
+              <button type="button" onClick={() => setActiveSchema("WebSite")}
                 className={`px-4 py-2.5 rounded-lg border z-10 cursor-pointer transition-all duration-300 font-mono text-[11px] ${activeSchema === "WebSite" ? "bg-brand-primary/10 border-brand-primary/30 text-[#1a73e8]" : "bg-white/[0.02] border-white/5 text-foreground/50 hover:border-white/20"}`}>
                 WebSite Schema
-              </div>
-              <div onClick={() => setActiveSchema("Organization")}
+              </button>
+              <button type="button" onClick={() => setActiveSchema("Organization")}
                 className={`px-4 py-2.5 rounded-lg border z-10 cursor-pointer transition-all duration-300 font-mono text-[11px] ${activeSchema === "Organization" ? "bg-[#14b8a6]/10 border-[#14b8a6]/30 text-[#14b8a6]" : "bg-white/[0.02] border-white/5 text-foreground/50 hover:border-white/20"}`}>
                 Organization Schema
-              </div>
+              </button>
             </div>
           ) : (
             <div className="text-center p-6 space-y-2">

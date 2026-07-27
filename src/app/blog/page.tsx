@@ -24,7 +24,15 @@ export const metadata: Metadata = {
     description: "Practical insights on custom software, digital transformation, and business growth.",
     url: "https://maysanlabs.com/blog",
     type: "website",
+    siteName: "Maysan Labs",
     images: [{ url: ogImage("Maysan Labs Blog", "Practical insights on custom software, digital transformation, and business growth."), width: 1200, height: 630, alt: "Maysan Labs Blog" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog | Maysan Labs",
+    description: "Technical insights on enterprise SaaS, custom software development, and modern architecture.",
+    images: ["/og-image.webp"],
+    creator: "@maysanlabs",
   },
   alternates: { 
     canonical: "https://maysanlabs.com/blog",

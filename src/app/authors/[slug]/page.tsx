@@ -25,6 +25,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${author.name} - ${author.role} at Maysan Labs`,
       description: author.bio,
+      siteName: "Maysan Labs",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${author.name} | Authors | Maysan Labs`,
+      description: author.bio,
+      creator: "@maysanlabs",
     },
     alternates: {
       canonical: `https://maysanlabs.com/authors/${slug}`,

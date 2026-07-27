@@ -1,11 +1,3 @@
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  alternates: {
-    canonical: "https://maysanlabs.com/services",
-  },
-};
-
 export default function ServicesLayout({
   children,
 }: {

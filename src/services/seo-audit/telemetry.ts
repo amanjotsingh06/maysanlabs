@@ -1,10 +1,10 @@
 import dns from "dns";
-import { isDeniedIp } from "@/core/security/ssrf";
+import { isDeniedIp, safeFetch } from "@/core/security/ssrf";
 import type { IndiaTelemetry } from "./types";
 
 async function resolveGeoLocation(ip: string): Promise<{ country: string; city: string; isp: string } | null> {
   try {
-    const res = await fetch(`https://ip-api.com/json/${ip}`, { signal: AbortSignal.timeout(3000) });
+    const res = await safeFetch(`https://ip-api.com/json/${ip}`, { signal: AbortSignal.timeout(3000) });
     if (res.ok) {
       const data = await res.json();
       if (data?.status === "success") {
@@ -14,7 +14,7 @@ async function resolveGeoLocation(ip: string): Promise<{ country: string; city: 
   } catch { /* fall through */ }
 
   try {
-    const res = await fetch(`https://ipwho.is/${ip}`, { signal: AbortSignal.timeout(3000) });
+    const res = await safeFetch(`https://ipwho.is/${ip}`, { signal: AbortSignal.timeout(3000) });
     if (res.ok) {
       const data = await res.json();
       if (data?.success) {

@@ -35,7 +35,8 @@ async function getFont(weight: number): Promise<Buffer> {
 }
 
 export async function GET(request: Request) {
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  try {
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   const rateCheck = checkRateLimit("og:" + ip, 30, 60 * 1000);
   if (!rateCheck.allowed) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
@@ -253,4 +254,8 @@ export async function GET(request: Request) {
       "Cache-Control": "public, max-age=31536000, immutable",
     },
   });
+  } catch (error) {
+    console.error("[OG] Error generating image:", error);
+    return new Response("Failed to generate image", { status: 500 });
+  }
 }

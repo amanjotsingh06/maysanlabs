@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const study = caseStudies.find((s) => s.slug === slug);
   if (!study) return { title: "Case Study Not Found" };
-  const siteUrl = "https://maysanlabs.com";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://maysanlabs.com";
   const og = ogImageUrl(study.title, study.challenge);
   return {
     title: `${study.title} | Case Studies`,

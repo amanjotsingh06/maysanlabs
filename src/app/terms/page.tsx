@@ -9,6 +9,7 @@ const ogImage = (t: string, d?: string) =>
 export const metadata: Metadata = {
   title: "Terms of Service",
   description: "Maysan Labs Terms of Service — read the terms and conditions governing your use of our website, software development, and consulting services.",
+  keywords: ["Maysan Labs terms of service", "terms and conditions", "software development terms", "Maysan Labs"],
   robots: { index: true, follow: true },
   openGraph: {
     title: "Terms of Service",
@@ -16,13 +17,15 @@ export const metadata: Metadata = {
     url: "https://maysanlabs.com/terms",
     type: "website",
     siteName: "Maysan Labs",
-    images: [{ url: ogImage("Terms of Service | Maysan Labs", "Terms and conditions for using Maysan Labs website and services."), width: 1200, height: 630 }],
+    images: [{ url: ogImage("Terms of Service | Maysan Labs", "Terms and conditions for using Maysan Labs website and services."), width: 1200, height: 630, alt: "Terms of Service - Maysan Labs" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Terms of Service",
     description: "Maysan Labs Terms of Service — terms and conditions for using our website and services.",
     images: [ogImage("Terms of Service | Maysan Labs", "Terms and conditions for using Maysan Labs website and services.")],
+    creator: "@maysanlabs",
+    site: "@maysanlabs",
   },
   alternates: {
     canonical: "https://maysanlabs.com/terms",

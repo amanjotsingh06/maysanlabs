@@ -295,7 +295,7 @@ export default function PresentationEngineClient() {
   }, [revokeBlob]);
 
   return (
-    <main className="min-h-screen bg-background text-foreground flex flex-col justify-between">
+    <main id="main-content" className="min-h-screen bg-background text-foreground flex flex-col justify-between">
       <div>
         <Navbar />
 

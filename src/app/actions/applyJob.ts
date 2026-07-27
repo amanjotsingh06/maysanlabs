@@ -37,6 +37,11 @@ export async function applyJob(formData: FormData) {
     return { success: false, message: "Missing required fields (Name, Email, Resume)" };
   }
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (email && !emailRegex.test(email)) {
+    return { success: false, message: "Invalid email format" };
+  }
+
   let validatedResume;
   try {
     validatedResume = await validateResume(resumeRaw);

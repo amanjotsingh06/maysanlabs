@@ -38,6 +38,10 @@ const ROUTE_CONFIG: Record<string, { priority: number; changeFrequency: Metadata
   '/services/web': { priority: 0.8, changeFrequency: 'weekly' },
   '/services/cloud': { priority: 0.8, changeFrequency: 'weekly' },
   '/services/ai': { priority: 0.8, changeFrequency: 'weekly' },
+  '/services/medusa-ecommerce': { priority: 0.8, changeFrequency: 'weekly' },
+  '/services/email-infrastructure': { priority: 0.8, changeFrequency: 'weekly' },
+  '/services/gst-billing-automation': { priority: 0.8, changeFrequency: 'weekly' },
+  '/tools/presentation-engine': { priority: 0.7, changeFrequency: 'weekly' },
 }
 
 const DEFAULT_CONFIG = { priority: 0.6, changeFrequency: 'monthly' as const }
@@ -60,6 +64,10 @@ const ROUTE_DEPENDENCIES: Record<string, string[]> = {
   '/services/web': ['src/app/services/web/page.tsx', 'src/app/layout.tsx'],
   '/services/cloud': ['src/app/services/cloud/page.tsx', 'src/app/layout.tsx'],
   '/services/ai': ['src/app/services/ai/page.tsx', 'src/app/layout.tsx'],
+  '/services/medusa-ecommerce': ['src/app/services/medusa-ecommerce/page.tsx', 'src/app/layout.tsx'],
+  '/services/email-infrastructure': ['src/app/services/email-infrastructure/page.tsx', 'src/app/layout.tsx'],
+  '/services/gst-billing-automation': ['src/app/services/gst-billing-automation/page.tsx', 'src/app/layout.tsx'],
+  '/tools/presentation-engine': ['src/app/tools/presentation-engine/page.tsx', 'src/app/layout.tsx'],
 }
 
 // Get the latest modification time from a list of files
@@ -183,6 +191,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       images: [`${BASE_URL}/og-image.webp`],
     })
   })
+
+  // Add author pages
+  const authorSlugs = ['sanjay-mandal', 'maysan-engineering-team', 'maysan-architecture', 'saurav-mandal'];
+  authorSlugs.forEach(slug => {
+    routes.push({
+      url: `${BASE_URL}/authors/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    });
+  });
 
   // Add programmatic hire landing pages (supports hundreds of location/role pages)
   const SLUG_BATCH_SIZE = 100;

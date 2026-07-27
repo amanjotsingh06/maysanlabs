@@ -66,13 +66,14 @@ export default function CaseStudiesClient() {
               <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/30" />
               <input
                 type="text"
+                aria-label="Search case studies"
                 placeholder="Search case studies..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-11 pr-10 py-3 bg-white/[0.03] border border-white/[0.08] rounded-full text-sm text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-brand-primary/40 focus:bg-white/[0.05] transition-all"
               />
               {searchQuery && (
-                <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/30 hover:text-foreground transition-colors">
+                <button onClick={() => setSearchQuery("")} aria-label="Clear search" className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/30 hover:text-foreground transition-colors">
                   <X size={16} />
                 </button>
               )}

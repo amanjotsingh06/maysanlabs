@@ -55,8 +55,8 @@ export function SpeedSimulator({ lcp, fcp, ttfb }: { lcp: number; fcp: number; t
         <div className="lg:col-span-7 space-y-6">
           <div className="space-y-4">
             {steps.map((s, idx) => (
-              <div key={idx} onClick={() => { setStep(idx); setIsPlaying(false); }}
-                className={`p-3 rounded-xl border transition-all duration-300 cursor-pointer ${
+              <button key={idx} type="button" onClick={() => { setStep(idx); setIsPlaying(false); }}
+                className={`p-3 rounded-xl border transition-all duration-300 cursor-pointer text-left w-full ${
                   step === idx ? "bg-brand-primary/5 border-brand-primary/30 shadow-lg shadow-brand-primary/5" : "bg-transparent border-transparent hover:bg-white/[0.02]"
                 }`}>
                 <div className="flex items-center justify-between">
@@ -64,7 +64,7 @@ export function SpeedSimulator({ lcp, fcp, ttfb }: { lcp: number; fcp: number; t
                     <span className="text-[9px] font-mono text-foreground/30">Step {idx + 1}</span>
                 </div>
                 <p className="text-xs text-foreground/45 mt-1 leading-relaxed">{s.desc}</p>
-              </div>
+              </button>
             ))}
           </div>
 

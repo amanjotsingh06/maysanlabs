@@ -1,9 +1,3 @@
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  keywords: ["about Maysan Labs", "maysanlabs about", "Maysan Labs team", "enterprise SaaS company", "Gurgaon software company"],
-};
-
 export default function AboutLayout({
   children,
 }: {

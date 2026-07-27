@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { escapeHtml } from "@/core/security/escape";
 
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
@@ -75,9 +76,9 @@ export async function POST(request: NextRequest) {
       subject: `New newsletter subscriber: ${email}`,
       text: `New newsletter subscription\n\nEmail: ${email}${company ? `\nCompany: ${company}` : ""}${source ? `\nSource: ${source}` : ""}`,
       html: `<p><strong>New newsletter subscription</strong></p>
-             <p>Email: ${email}</p>
-             ${company ? `<p>Company: ${company}</p>` : ""}
-             ${source ? `<p>Source: ${source}</p>` : ""}`,
+             <p>Email: ${escapeHtml(email)}</p>
+             ${company ? `<p>Company: ${escapeHtml(company)}</p>` : ""}
+             ${source ? `<p>Source: ${escapeHtml(source)}</p>` : ""}`,
     });
 
     return NextResponse.json({ success: true, message: "Subscribed successfully!" });

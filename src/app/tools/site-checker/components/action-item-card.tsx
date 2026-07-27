@@ -77,7 +77,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return (
     <div className="bg-[#03050d]/40 border border-white/[0.04] rounded-xl overflow-hidden hover:border-white/10 transition-colors">
-      <div onClick={() => setIsOpen(!isOpen)} className="p-4 flex items-center justify-between cursor-pointer select-none">
+      <button type="button" onClick={() => setIsOpen(!isOpen)} aria-expanded={isOpen} className="p-4 flex items-center justify-between cursor-pointer select-none w-full">
         <div className="flex items-start gap-3 min-w-0 pr-4">
           <span className="mt-0.5 shrink-0 text-[#10b981]">
             <CheckCircle size={14} className="text-brand-primary" />
@@ -87,7 +87,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         <div className="shrink-0 text-foreground/45">
           {isOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
         </div>
-      </div>
+        </button>
 
       <AnimatePresence>
         {isOpen && codeTemplate && (

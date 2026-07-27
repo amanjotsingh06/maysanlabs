@@ -9,6 +9,7 @@ const ogImage = (t: string, d?: string) =>
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "Maysan Labs Privacy Policy explains how we collect, use, and protect your personal data when you use our website and services.",
+  keywords: ["Maysan Labs privacy policy", "data protection", "privacy policy", "GDPR", "Maysan Labs"],
   robots: { index: true, follow: true },
   openGraph: {
     title: "Privacy Policy",
@@ -16,13 +17,15 @@ export const metadata: Metadata = {
     url: "https://maysanlabs.com/privacy",
     type: "website",
     siteName: "Maysan Labs",
-    images: [{ url: ogImage("Privacy Policy | Maysan Labs", "How we collect, use, and protect your data."), width: 1200, height: 630 }],
+    images: [{ url: ogImage("Privacy Policy | Maysan Labs", "How we collect, use, and protect your data."), width: 1200, height: 630, alt: "Privacy Policy - Maysan Labs" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Privacy Policy",
     description: "Maysan Labs Privacy Policy — how we collect, use, and protect your data.",
     images: [ogImage("Privacy Policy | Maysan Labs", "How we collect, use, and protect your data.")],
+    creator: "@maysanlabs",
+    site: "@maysanlabs",
   },
   alternates: {
     canonical: "https://maysanlabs.com/privacy",

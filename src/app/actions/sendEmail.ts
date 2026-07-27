@@ -32,6 +32,11 @@ export async function sendEmail(formData: FormData) {
     return { success: false, message: "Missing required fields" };
   }
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (email && !emailRegex.test(email)) {
+    return { success: false, message: "Invalid email format" };
+  }
+
   // Check for missing SMTP configuration
   const smtpConfigured =
     process.env.SMTP_HOST &&

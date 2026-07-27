@@ -14,7 +14,15 @@ export const metadata: Metadata = {
     description: "Explore our latest technical insights, architectural deep dives, and scaling strategies for modern SaaS products.",
     url: "https://maysanlabs.com/insights",
     type: "website",
+    siteName: "Maysan Labs",
     images: [{ url: ogImage("Insights & Technical Blog", "Architectural deep dives, scaling strategies, and best practices for modern SaaS products."), width: 1200, height: 630, alt: "Technical Insights - Maysan Labs" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Insights & Technical Blog",
+    description: "Explore our latest technical insights, architectural deep dives, and scaling strategies for modern SaaS products.",
+    images: ["/og-image.webp"],
+    creator: "@maysanlabs",
   },
   alternates: { 
     canonical: "https://maysanlabs.com/insights",
