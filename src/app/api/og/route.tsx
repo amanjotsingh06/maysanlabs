@@ -1,5 +1,7 @@
 import satori from "satori";
 import sharp from "sharp";
+import { NextResponse } from "next/server";
+import { checkRateLimit } from "@/core/rate-limit";
 import { safeFetch } from "@/core/security/ssrf";
 
 let fontRegular: Buffer | null = null;
@@ -33,6 +35,12 @@ async function getFont(weight: number): Promise<Buffer> {
 }
 
 export async function GET(request: Request) {
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const rateCheck = checkRateLimit("og:" + ip, 30, 60 * 1000);
+  if (!rateCheck.allowed) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
+
   const { searchParams } = new URL(request.url);
   const sanitize = (str: string, maxLen: number) =>
     str.replace(/<[^>]*>/g, '').replace(/[<>"'&]/g, '').slice(0, maxLen);

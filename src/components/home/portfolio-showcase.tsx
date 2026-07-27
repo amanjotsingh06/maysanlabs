@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, CheckCircle2 } from "lucide-react";
 
@@ -122,6 +121,7 @@ export default function PortfolioShowcase({
                     scrollPercentage === "0%" ? "h-full flex items-center justify-center" : "h-auto"
                   }`}
                 >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img 
                     src={imageUrl} 
                     alt={`${title} product interface preview`}

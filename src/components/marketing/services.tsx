@@ -9,11 +9,10 @@ import {
   Code2,
   Database,
   Cloud,
-  Mail,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 const services = [

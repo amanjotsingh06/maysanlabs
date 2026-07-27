@@ -1,5 +1,3 @@
-"use client";
-
 export interface ScanRecord {
   url: string;
   strategy: string;

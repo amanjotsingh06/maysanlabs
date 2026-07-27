@@ -59,7 +59,7 @@ export async function applyJob(formData: FormData) {
 
   if (!smtpConfigured) {
     console.warn("SMTP not configured. Application received (details omitted for security).");
-    return { success: true, message: "Application submitted successfully" };
+    return { success: false, message: "Application received but email delivery is not configured. Please email us directly at careers@maysanlabs.com" };
   }
 
   const transporter = nodemailer.createTransport({

@@ -142,14 +142,14 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon-v2.png" },
-      { url: "/icon-192x192-v3.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon-512x512-v3.png", sizes: "512x512", type: "image/png" },
+      { url: "/icon-192x192-v4.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512x512-v4.png", sizes: "512x512", type: "image/png" },
     ],
     shortcut: "/favicon-v2.png",
     apple: [
       { url: "/icon-rounded-v2.png?v=100" },
-      { url: "/icon-192x192-v3.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon-512x512-v3.png", sizes: "512x512", type: "image/png" },
+      { url: "/icon-192x192-v4.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512x512-v4.png", sizes: "512x512", type: "image/png" },
     ],
   },
   manifest: "/manifest.json?v=100",
@@ -180,7 +180,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={cn("antialiased", outfit.variable, jetbrainsMono.variable)}>
 <head>
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
         {/* Combined JSON-LD structured data — single @graph for fewer script tags */}
         <script

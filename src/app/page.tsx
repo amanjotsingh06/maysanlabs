@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { generateIndividualReviewSchemas } from "@/data/seo-schema";
 import { blogPosts } from "@/data/blog";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://maysanlabs.com",
+  },
+};
 
 import Navbar from "@/components/layout/navbar";
 import Hero from "@/components/home/hero";

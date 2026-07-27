@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { checkRateLimit } from "@/core/rate-limit";
 import { safeFetch, assertSafeFetchUrl } from "@/core/security/ssrf";
 
 const CRON_SECRET = process.env.CRON_SECRET;
@@ -12,6 +13,12 @@ export async function GET(request: Request) {
   const auth = request.headers.get('authorization')?.replace('Bearer ', '');
   if (!CRON_SECRET || !auth || auth !== CRON_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const rateCheck = checkRateLimit(`content:${ip}`, 20, 60 * 1000);
+  if (!rateCheck.allowed) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://maysanlabs.com';

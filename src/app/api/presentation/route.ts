@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { checkRateLimit } from "@/core/rate-limit";
 import { safeFetch } from "@/core/security/ssrf";
 
 const PRESENTATION_SYSTEM_PROMPT = `You are the core Presentation Intelligence Engine for Maysan Labs. Your single responsibility is to act as a structured data parser. You take unstructured raw data, business reports, or legacy code formats (like ReportLab PDF definitions) and map them into a flawless JSON schema that builds high-end, professional 16:9 widescreen presentations.
@@ -131,6 +132,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    const rateCheck = checkRateLimit("presentation:" + ip, 5, 60 * 1000);
+    if (!rateCheck.allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
     const { rawData } = await request.json();
 
     if (!rawData || typeof rawData !== "string" || rawData.trim().length === 0) {
@@ -196,13 +203,13 @@ export async function POST(request: Request) {
           parsed = JSON.parse(jsonMatch[0]);
         } catch {
           return NextResponse.json(
-            { error: "Failed to parse AI response as JSON", raw: content },
+            { error: "Failed to parse AI response as JSON" },
             { status: 422 }
           );
         }
       } else {
         return NextResponse.json(
-          { error: "No JSON found in AI response", raw: content },
+          { error: "No JSON found in AI response" },
           { status: 422 }
         );
       }
