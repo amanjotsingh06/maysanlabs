@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,7 +12,6 @@ interface PortfolioShowcaseProps {
   description: string;
   benefits?: string[];
   imageUrl: string;
-  iframeUrl?: string; // Live site URL for dummy computer sandbox
   ctaText?: string;
   ctaHref?: string;
   secondaryCtaText?: string;
@@ -29,7 +27,6 @@ export default function PortfolioShowcase({
   description,
   benefits = [],
   imageUrl,
-  iframeUrl,
   ctaText = "Explore Project",
   ctaHref = "#",
   secondaryCtaText,
@@ -37,7 +34,6 @@ export default function PortfolioShowcase({
   scrollPercentage = "82%",
   reverse = false,
 }: PortfolioShowcaseProps) {
-  const [isLiveMode, setIsLiveMode] = useState(false);
   return (
     <div className={`w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center py-12 md:py-16 ${reverse ? 'lg:flex-row-reverse' : ''}`}>
       
@@ -85,20 +81,6 @@ export default function PortfolioShowcase({
               <ArrowUpRight size={14} />
             </Link>
 
-            {iframeUrl && (
-              <button 
-                onClick={() => setIsLiveMode(!isLiveMode)}
-                className={`inline-flex items-center gap-2 px-6 py-3 rounded-full border font-bold text-[9px] sm:text-[10px] uppercase tracking-widest transition-all duration-300 hover:scale-105 active:scale-95 ${
-                  isLiveMode 
-                    ? "bg-green-500/20 border-green-500/40 text-green-400" 
-                    : "bg-white/[0.03] border-white/15 text-foreground/70 hover:bg-white/[0.08] hover:text-foreground hover:border-white/25"
-                }`}
-              >
-                <span className={`w-1.5 h-1.5 rounded-full ${isLiveMode ? "bg-green-400 animate-pulse" : "bg-white/40"}`} />
-                <span>{isLiveMode ? "Disable Sandbox" : "Interact Live"}</span>
-              </button>
-            )}
-
             {secondaryCtaText && secondaryCtaHref && (
               <Link 
                 href={secondaryCtaHref} 
@@ -132,49 +114,23 @@ export default function PortfolioShowcase({
             {/* Screen Inner Glass Area */}
             <div className="absolute inset-[3%] bg-[#121212] rounded-md overflow-hidden">
               
-              {/* Floating Glassmorphic Interactive Sandbox Toggle */}
-              {iframeUrl && (
-                <button
-                  onClick={() => setIsLiveMode(!isLiveMode)}
-                  className={`absolute top-2.5 right-2.5 z-30 px-2.5 py-1 rounded-full text-[8px] sm:text-[9px] uppercase tracking-widest font-extrabold flex items-center gap-1.5 transition-all duration-300 backdrop-blur-md shadow-lg ${
-                    isLiveMode 
-                      ? "bg-green-500/20 border border-green-500/40 text-green-400" 
-                      : "bg-black/60 border border-white/10 text-white/70 hover:bg-black/80 hover:text-white"
+              {/* Scrolling Image Layer */}
+              <div className="w-full h-full relative overflow-hidden">
+                <div 
+                  style={{ '--scroll-translate': `-${scrollPercentage}` } as React.CSSProperties}
+                  className={`w-full absolute top-0 left-0 transition-transform duration-[4500ms] ease-in-out transform translate-y-0 group-hover:translate-y-[var(--scroll-translate)] ${
+                    scrollPercentage === "0%" ? "h-full flex items-center justify-center" : "h-auto"
                   }`}
                 >
-                  <span className={`w-1.5 h-1.5 rounded-full ${isLiveMode ? "bg-green-400 animate-pulse" : "bg-white/40"}`} />
-                  <span>{isLiveMode ? "Sandbox Active" : "Interact Live"}</span>
-                </button>
-              )}
-
-              {isLiveMode && iframeUrl ? (
-                <iframe
-                  src={iframeUrl}
-                  className="w-full h-full border-0 bg-white"
-                  title={`${title} live sandbox preview`}
-                  sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                  referrerPolicy="no-referrer"
-                  loading="lazy"
-                />
-              ) : (
-                /* Scrolling Image Layer */
-                <div className="w-full h-full relative overflow-hidden">
-                  <div 
-                    style={{ '--scroll-translate': `-${scrollPercentage}` } as React.CSSProperties}
-                    className={`w-full absolute top-0 left-0 transition-transform duration-[4500ms] ease-in-out transform translate-y-0 group-hover:translate-y-[var(--scroll-translate)] ${
-                      scrollPercentage === "0%" ? "h-full flex items-center justify-center" : "h-auto"
+                  <img 
+                    src={imageUrl} 
+                    alt={`${title} product interface preview`}
+                    className={`w-full ${
+                      scrollPercentage === "0%" ? "h-full object-fill" : "h-auto object-cover object-top"
                     }`}
-                  >
-                    <img 
-                      src={imageUrl} 
-                      alt={`${title} product interface preview`}
-                      className={`w-full ${
-                        scrollPercentage === "0%" ? "h-full object-fill" : "h-auto object-cover object-top"
-                      }`}
-                    />
-                  </div>
+                  />
                 </div>
-              )}
+              </div>
 
               {/* Reflection Screen Gloss overlay */}
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-white/[0.04] pointer-events-none z-10" />

@@ -20,7 +20,6 @@ const liveProducts = [
       "Autonomous dispatch and logistics pipeline"
     ],
     imageUrl: "/banner-centered-v4.webp",
-    iframeUrl: "https://flashhfashion.in/",
     ctaHref: "/case-studies/flash-fashion-ecommerce",
     ctaText: "Explore Case Study",
     secondaryCtaText: "Launch Live Site",
@@ -39,7 +38,6 @@ const liveProducts = [
       "Complete data privacy — your list, your server"
     ],
     imageUrl: "/MaysanMails.png?v=1",
-    iframeUrl: "",
     ctaHref: "/contact",
     ctaText: "Set Up Your Email Infrastructure",
     secondaryCtaText: "",
@@ -58,7 +56,6 @@ const liveProducts = [
       "Advanced biometric and dynamic attendance tracking"
     ],
     imageUrl: "/edu_maysan.png?v=3",
-    iframeUrl: "https://edumaysan.maysanlabs.com/",
     ctaHref: "/products/edu-maysan",
     ctaText: "Explore Product Details",
     secondaryCtaText: "Launch Live Site",
@@ -123,7 +120,6 @@ export default function ProductsClient() {
               description={product.description}
               benefits={product.benefits}
               imageUrl={product.imageUrl}
-              iframeUrl={product.iframeUrl}
               ctaHref={product.ctaHref}
               ctaText={product.ctaText}
               secondaryCtaText={product.secondaryCtaText}
