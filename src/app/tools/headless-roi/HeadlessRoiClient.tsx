@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Calculator, CheckCircle2, TrendingUp, Clock, Download, Sparkles, Loader2 } from "lucide-react";
+import { ArrowLeft, Calculator, TrendingUp, Clock } from "lucide-react";
+import { LeadCaptureCTA, ResultSummary } from "@/components/conversion-flow";
 import Link from "next/link";
 import Navbar from "@/components/layout/navbar";
 import ContactFooter from "@/components/layout/footer";
@@ -19,11 +20,7 @@ export default function HeadlessRoiClient() {
   const [aov, setAov] = useState(1500); // Default ₹1,500 AOV
   const [selectedPlatform, setSelectedPlatform] = useState(0);
   const [conversionRate, setConversionRate] = useState(1.8);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [email, setEmail] = useState("");
-  const [company, setCompany] = useState("");
-  const [leadSubmitting, setLeadSubmitting] = useState(false);
-  const [leadError, setLeadError] = useState<string | null>(null);
+
 
   const platform = platforms[selectedPlatform];
 
@@ -63,33 +60,7 @@ export default function HeadlessRoiClient() {
     };
   }, [monthlySales, aov, conversionRate, platform]);
 
-  const handleLeadSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !company) return;
-    setLeadSubmitting(true);
-    setLeadError(null);
 
-    try {
-      const res = await fetch("/api/newsletter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, company, source: "headless-roi" }),
-      });
-
-      if (res.ok) {
-        setIsSubmitted(true);
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: "tool_lead", tool: "headless-roi", email: email.trim().toLowerCase() });
-      } else {
-        const data = await res.json();
-        setLeadError(data.error || "Something went wrong.");
-      }
-    } catch {
-      setLeadError("Network error. Please try again.");
-    } finally {
-      setLeadSubmitting(false);
-    }
-  }, [email, company]);
 
   return (
     <main id="main-content" className="min-h-screen bg-background text-foreground flex flex-col justify-between">
@@ -291,86 +262,31 @@ export default function HeadlessRoiClient() {
             </div>
 
             {/* Lead capture hook card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="glass-strong rounded-3xl p-6 md:p-8 border-2 border-brand-primary/30"
-            >
-              {isSubmitted ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="text-center py-4"
-                >
-                  <div className="w-16 h-16 rounded-full bg-green-400/10 border border-green-400/20 flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle2 size={32} className="text-green-400" />
-                  </div>
-                  <h3 className="text-xl font-bold text-foreground mb-2">ROI Report Unlocked!</h3>
-                  <p className="text-sm text-foreground/50 mb-6">
-                    We have compiled your Platform migration roadmap. A custom copy is on its way to <strong className="text-foreground">{email}</strong>.
-                  </p>
-                  <Link
-                    href="/start"
-                    className="px-6 py-3 bg-brand-primary rounded-full font-semibold text-sm text-black hover:shadow-[0_0_30px_rgba(26,109,214,0.5)] transition-all inline-flex items-center gap-2"
-                  >
-                    <Sparkles size={14} />
-                    Schedule Migration Scoping
-                  </Link>
-                </motion.div>
-              ) : (
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                  <div className="space-y-2 max-w-md">
-                    <h3 className="text-lg font-bold text-foreground">Unlock Migration Roadmap & Detailed Audit</h3>
-                    <p className="text-xs text-foreground/50 leading-relaxed">
-                      Enter your details to generate a highly detailed, printable PDF breakdown including headless checkout integration paths (Shopify headless vs Medusa API) and full scaling analysis.
-                    </p>
-                  </div>
+            <div className="mt-8 space-y-6">
+              <ResultSummary 
+                title="Calculated ROI"
+                metrics={[
+                  { label: "Annual Net Savings", value: `₹${calculations.annualNetSavings.toLocaleString()}` },
+                  { label: "Break-even Timeline", value: `${calculations.breakEvenMonths} Months` },
+                  { label: "Projected Speed Conversion Lift", value: `+₹${Math.round(calculations.monthlyRevenueLift * 12).toLocaleString()} / year` },
+                ]}
+              />
 
-                  <form onSubmit={handleLeadSubmit} className="w-full md:w-auto flex-1 max-w-md space-y-3">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <input
-                        type="email"
-                        required
-                        aria-label="Email address"
-                        placeholder="you@company.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="bg-white/50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-xs text-foreground placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary/50 transition-all"
-                      />
-                      <input
-                        type="text"
-                        required
-                        aria-label="Company name"
-                        placeholder="Company Name"
-                        value={company}
-                        onChange={(e) => setCompany(e.target.value)}
-                        className="bg-white/50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-xs text-foreground placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary/50 transition-all"
-                      />
-                    </div>
-                    {leadError && (
-                      <p className="text-red-400 text-[10px]">{leadError}</p>
-                    )}
-                    <button
-                      type="submit"
-                      disabled={leadSubmitting}
-                      className="w-full py-2.5 bg-brand-primary text-black hover:shadow-[0_0_20px_rgba(26,109,214,0.4)] rounded-xl font-bold uppercase text-[10px] sm:text-xs md:text-sm tracking-wider transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-                    >
-                      {leadSubmitting ? (
-                        <>
-                          <Loader2 size={12} className="animate-spin" />
-                          Submitting...
-                        </>
-                      ) : (
-                        <>
-                          <Download size={12} />
-                          Unlock Roadmap PDF
-                        </>
-                      )}
-                    </button>
-                  </form>
-                </div>
-              )}
-            </motion.div>
+              <LeadCaptureCTA
+                title="Unlock Migration Roadmap & Detailed Audit"
+                description="Enter your details to generate a highly detailed, printable PDF breakdown including headless checkout integration paths and full scaling analysis."
+                buttonLabel="Unlock Roadmap PDF"
+                toolName="Headless ROI Calculator"
+                pagePath="/tools/headless-roi"
+                resultData={{
+                  monthlySales,
+                  aov,
+                  platform: platform.name,
+                  conversionRate,
+                  calculations
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>

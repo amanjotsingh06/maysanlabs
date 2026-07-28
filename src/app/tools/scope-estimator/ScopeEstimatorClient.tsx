@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Calculator, CheckCircle2, ChevronRight, ChevronLeft, Calendar, Mail, Download, Sparkles, Loader2 } from "lucide-react";
+import { ArrowLeft, Calculator, ChevronRight, ChevronLeft, Calendar } from "lucide-react";
+import { LeadCaptureCTA, ResultSummary } from "@/components/conversion-flow";
 import Link from "next/link";
 import Navbar from "@/components/layout/navbar";
 import ContactFooter from "@/components/layout/footer";
@@ -34,12 +35,6 @@ export default function ScopeEstimatorClient() {
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
   const [selectedInfra, setSelectedInfra] = useState<string[]>([]);
   const [acceleratedTimeline, setAcceleratedTimeline] = useState(false);
-  
-  const [email, setEmail] = useState("");
-  const [company, setCompany] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [leadSubmitting, setLeadSubmitting] = useState(false);
-  const [leadError, setLeadError] = useState<string | null>(null);
 
   const toggleFeature = (id: string) => {
     setSelectedFeatures((prev) =>
@@ -87,36 +82,6 @@ export default function ScopeEstimatorClient() {
     };
   }, [selectedApp, selectedFeatures, selectedInfra, acceleratedTimeline]);
 
-  const handleLeadSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !company) return;
-    setLeadSubmitting(true);
-    setLeadError(null);
-
-    const app = appTypes.find((a) => a.id === selectedApp)?.name || "Custom App";
-    const specs = `App: ${app}. Features: ${selectedFeatures.join(", ")}. Infra: ${selectedInfra.join(", ")}. Acceleration: ${acceleratedTimeline ? "Yes" : "No"}`;
-
-    try {
-      const res = await fetch("/api/newsletter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, company, source: `scope-estimator: ${specs}` }),
-      });
-
-      if (res.ok) {
-        setIsSubmitted(true);
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: "tool_lead", tool: "scope-estimator", email: email.trim().toLowerCase() });
-      } else {
-        const data = await res.json();
-        setLeadError(data.error || "Something went wrong.");
-      }
-    } catch {
-      setLeadError("Network error. Please try again.");
-    } finally {
-      setLeadSubmitting(false);
-    }
-  }, [email, company, selectedApp, selectedFeatures, selectedInfra, acceleratedTimeline]);
 
   return (
     <main id="main-content" className="min-h-screen bg-background text-foreground flex flex-col justify-between">
@@ -299,81 +264,34 @@ export default function ScopeEstimatorClient() {
                     >
                       <h3 className="text-lg font-bold text-foreground mb-4">4. Scoping Lead Submission</h3>
                       
-                      {isSubmitted ? (
-                        <div className="text-center py-10">
-                          <div className="w-16 h-16 rounded-full bg-green-400/10 border border-green-400/20 flex items-center justify-center mx-auto mb-4">
-                            <CheckCircle2 size={32} className="text-green-400" />
-                          </div>
-                          <h4 className="text-lg font-bold text-foreground mb-2">Estimate Submitted Successfully!</h4>
-                          <p className="text-xs text-foreground/50 leading-relaxed mb-6">
-                            We have received your custom architecture choices. A PDF recommendation has been dispatched to <strong className="text-foreground">{email}</strong>.
-                          </p>
-                          <Link
-                            href="/start"
-                            className="px-6 py-3.5 bg-brand-primary text-black rounded-full font-bold uppercase text-[10px] sm:text-xs md:text-sm tracking-wider transition-all inline-flex items-center gap-2"
-                          >
-                            <Sparkles size={12} />
-                            Schedule Requirements Audit Call
-                          </Link>
-                        </div>
-                      ) : (
-                        <div className="space-y-4">
-                          <div className="flex items-center gap-3 bg-brand-primary/5 border border-brand-primary/20 p-4 rounded-xl">
-                            <Mail className="text-brand-primary" size={20} />
-                            <div>
-                              <p className="text-xs font-bold text-foreground">Lock in Your Pricing & Recieve PDF Checklist</p>
-                              <p className="text-[10px] text-foreground/50">Submit your work email and company name to unlock dynamic recomendations.</p>
-                            </div>
-                          </div>
-
-                          <form onSubmit={handleLeadSubmit} className="space-y-4">
-                            <div>
-                              <label htmlFor="user-email" className="text-xs font-semibold text-foreground/70 mb-1.5 block">Email Address *</label>
-                              <input
-                                id="user-email"
-                                type="email"
-                                required
-                                placeholder="you@company.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="w-full bg-white/50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary/50 transition-all"
-                              />
-                            </div>
-                            <div>
-                              <label htmlFor="user-company" className="text-xs font-semibold text-foreground/70 mb-1.5 block">Company Name *</label>
-                              <input
-                                id="user-company"
-                                type="text"
-                                required
-                                placeholder="Acme Corp"
-                                value={company}
-                                onChange={(e) => setCompany(e.target.value)}
-                                className="w-full bg-white/50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary/50 transition-all"
-                              />
-                            </div>
-                            {leadError && (
-                              <p className="text-red-400 text-xs">{leadError}</p>
-                            )}
-                            <button
-                              type="submit"
-                              disabled={leadSubmitting}
-                              className="w-full py-3 bg-brand-primary text-black rounded-xl font-bold uppercase text-[10px] sm:text-xs md:text-sm tracking-wider transition-all flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(26,109,214,0.4)]"
-                            >
-                              {leadSubmitting ? (
-                                <>
-                                  <Loader2 size={14} className="animate-spin" />
-                                  Scoping...
-                                </>
-                              ) : (
-                                <>
-                                  <Download size={14} />
-                                  Unlock Detailed Cost Breakdown
-                                </>
-                              )}
-                            </button>
-                          </form>
-                        </div>
-                      )}
+                      <div className="mb-6">
+                        <ResultSummary 
+                          title="Scoping Summary"
+                          metrics={[
+                            { label: "Estimated Budget", value: `₹${estimates.minCost.toLocaleString()} - ₹${estimates.maxCost.toLocaleString()}` },
+                            { label: "Timeline", value: `${estimates.timelineWeeks} Weeks` },
+                            { label: "Architecture", value: appTypes.find((a) => a.id === selectedApp)?.name || "Custom App" },
+                            { label: "Features Selected", value: selectedFeatures.length.toString() },
+                          ]}
+                        />
+                      </div>
+                      
+                      <LeadCaptureCTA
+                        title="Lock in Your Pricing & Receive PDF Checklist"
+                        description="Want our engineering team to turn this blueprint into reality? Submit your details to receive expert guidance."
+                        buttonLabel="Unlock Detailed Cost Breakdown"
+                        toolName="App Cost Estimator"
+                        pagePath="/tools/scope-estimator"
+                        resultData={{
+                          appType: appTypes.find((a) => a.id === selectedApp)?.name,
+                          features: selectedFeatures,
+                          infra: selectedInfra,
+                          acceleratedTimeline,
+                          estimatedMinCost: estimates.minCost,
+                          estimatedMaxCost: estimates.maxCost,
+                          timelineWeeks: estimates.timelineWeeks
+                        }}
+                      />
                     </motion.div>
                   )}
                 </AnimatePresence>

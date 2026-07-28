@@ -17,26 +17,22 @@ import type { WebVitalResult } from "@/types/pagespeed";
 
 import {
   ActionItemCard, RadarChart, SpeedSimulator, OverallScoreCircle, MetricBadge, MiniScoreCard,
-  IndianMarketTelemetryHub, SecurityTab, SeoTabError, SeoTabContent, LeadForm,
+  IndianMarketTelemetryHub, SecurityTab, SeoTabError, SeoTabContent,
   ScanRecord, perfSteps, seoSteps, metricInfo, HISTORY_KEY, MAX_HISTORY, loadHistory, getLabel,
 } from "./components";
+import { LeadCaptureCTA, ResultSummary } from "@/components/conversion-flow";
 
 export default function SiteCheckerClient({ initialUrl }: { initialUrl?: string }) {
   const [url, setUrl] = useState(initialUrl ?? "");
   const [strategy, setStrategy] = useState<"mobile" | "desktop">("mobile");
   const [scanning, setScanning] = useState(false);
 
-  const [leadCaptured, setLeadCaptured] = useState(false);
-  const [email, setEmail] = useState("");
-  const [company, setCompany] = useState("");
   const [showLeadForm, setShowLeadForm] = useState(false);
   const [perfResults, setPerfResults] = useState<WebVitalResult | null>(null);
   const [seoResults, setSeoResults] = useState<SeoAuditResult | null>(null);
   const [perfStep, setPerfStep] = useState("");
   const [seoStep, setSeoStep] = useState("");
   const [urlError, setUrlError] = useState<string | null>(null);
-  const [leadSubmitting, setLeadSubmitting] = useState(false);
-  const [leadError, setLeadError] = useState<string | null>(null);
   const [history, setHistory] = useState<ScanRecord[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -70,7 +66,6 @@ export default function SiteCheckerClient({ initialUrl }: { initialUrl?: string 
     setPerfResults(null);
     setSeoResults(null);
     setShowLeadForm(false);
-    setLeadCaptured(false);
     setPerfStep(perfSteps[0]);
     setSeoStep("");
 
@@ -210,25 +205,7 @@ export default function SiteCheckerClient({ initialUrl }: { initialUrl?: string 
     startScan();
   }, [startScan]);
 
-  const handleLeadSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !company) return;
-    setLeadSubmitting(true);
-    setLeadError(null);
-    try {
-      const res = await fetch("/api/newsletter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, company, source: "site-checker" }),
-      });
-      if (res.ok) {
-        setLeadCaptured(true);
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: "tool_lead", tool: "site-checker" });
-      } else { const d = await res.json(); setLeadError(d.error || "Something went wrong."); }
-    } catch { setLeadError("Network error. Please try again."); }
-    finally { setLeadSubmitting(false); }
-  }, [email, company]);
+
 
   const metrics = perfResults ? [perfResults.lcp, perfResults.inp, perfResults.cls, perfResults.ttfb] : [];
   const poorCount = metrics.filter((m) => m.grade === "poor").length;
@@ -616,18 +593,35 @@ export default function SiteCheckerClient({ initialUrl }: { initialUrl?: string 
                     <SecurityTab security={seoResults.security} />
                   )}
 
-                  <LeadForm
-                    leadCaptured={leadCaptured}
-                    showLeadForm={showLeadForm}
-                    setShowLeadForm={setShowLeadForm}
-                    email={email}
-                    setEmail={setEmail}
-                    company={company}
-                    setCompany={setCompany}
-                    leadSubmitting={leadSubmitting}
-                    handleLeadSubmit={handleLeadSubmit}
-                    leadError={leadError}
-                  />
+                  {showLeadForm && (
+                    <div className="mt-8 space-y-6">
+                      <ResultSummary 
+                        title="Audit Summary"
+                        metrics={[
+                          { label: "Overall Combined Score", value: `${combinedScore}/100` },
+                          { label: "Performance", value: perfResults?.performance ?? "N/A" },
+                          { label: "SEO Score", value: seoResults?.seoScore ?? perfResults?.seo ?? "N/A" },
+                          { label: "Accessibility", value: perfResults?.accessibility ?? "N/A" },
+                          { label: "Action Items", value: perfResults?.suggestions.length ?? 0 }
+                        ]}
+                      />
+                      
+                      <LeadCaptureCTA
+                        title="Get Your Full Audit Report & Next Steps"
+                        description="Want our engineering team to review these findings and create a custom performance optimization plan for your business? Book a free discovery call."
+                        buttonLabel="Book Free Discovery Call"
+                        toolName="Website Checker"
+                        pagePath="/tools/site-checker"
+                        resultData={{
+                          url: url,
+                          overallScore: combinedScore,
+                          performance: perfResults?.performance,
+                          seoScore: seoResults?.seoScore,
+                          actionItems: perfResults?.suggestions.length
+                        }}
+                      />
+                    </div>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
