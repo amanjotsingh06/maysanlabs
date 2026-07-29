@@ -1,18 +1,49 @@
 import { Lead } from "@/lib/lead/types";
 
-// This is an example mapper for a generic or specific CRM (e.g. Twenty)
+/**
+ * Maps our internal, normalized Lead object into the specific JSON schema required by Twenty CRM.
+ * Translates standard fields into Twenty's complex objects (Full Name, Emails array, Phones array)
+ * and formats custom fields to use camelCase API identifiers.
+ * 
+ * @param lead - The normalized lead object from the frontend
+ * @returns A JSON object ready to be sent to Twenty CRM's /people endpoint
+ */
 export function mapLeadToCrmPayload(lead: Lead): Record<string, unknown> {
-  return {
-    name: lead.lead.name,
-    email: lead.lead.email,
-    company: lead.lead.companyName,
-    phone: lead.lead.phone,
-    source_tool: lead.source.tool,
-    source_page: lead.source.page,
-    source_channel: lead.source.channel,
-    result_data: JSON.stringify(lead.result), // Flatten complex objects if CRM requires flat structures
-    created_at: lead.metadata.submittedAt,
-    user_agent: lead.metadata.userAgent,
-    referrer: lead.metadata.referrer,
+  // Split full name into first and last for Twenty's "Full Name" object
+  const nameParts = lead.lead.name.split(" ");
+  const firstName = nameParts[0];
+  const lastName = nameParts.slice(1).join(" ") || "";
+
+  const payload: Record<string, unknown> = {
+    name: {
+      firstName,
+      lastName,
+    },
+    emails: {
+      primaryEmail: lead.lead.email,
+      additionalEmails: []
+    },
+    
+    // Twenty CRM automatically converts snake_case names in the UI to camelCase in the API!
+    sourceTool: lead.source.tool,
+    sourcePage: lead.source.page,
+    sourceChannel: lead.source.channel || "",
+    resultData: lead.result, 
+    userAgent: lead.metadata.userAgent || "",
+    referrer: lead.metadata.referrer || "",
+    
+    // Custom text field for Company Name 
+    companyName: lead.lead.companyName, 
   };
+
+  if (lead.lead.phone) {
+    payload.phones = {
+      primaryPhoneNumber: lead.lead.phone,
+      primaryPhoneCountryCode: "",
+      primaryPhoneCallingCode: "",
+      additionalPhones: []
+    };
+  }
+
+  return payload;
 }

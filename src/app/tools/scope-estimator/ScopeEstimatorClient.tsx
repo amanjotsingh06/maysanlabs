@@ -163,7 +163,7 @@ export default function ScopeEstimatorClient() {
                             <div className="flex justify-between items-center mb-1">
                               <span className="font-bold text-sm">{app.name}</span>
                               <span className="text-[10px] sm:text-xs text-brand-primary font-mono bg-brand-primary/5 px-2 py-0.5 rounded">
-                                Base ~₹{app.baseCost.toLocaleString()}
+                                Base ~₹{app.baseCost.toLocaleString('en-IN')}
                               </span>
                             </div>
                             <p className="text-[11px] text-foreground/45 leading-relaxed">{app.desc}</p>
@@ -195,7 +195,7 @@ export default function ScopeEstimatorClient() {
                             <div className="flex justify-between items-center mb-1">
                               <span className="font-bold text-sm">{feat.name}</span>
                               <span className="text-[10px] sm:text-xs text-brand-primary font-mono bg-brand-primary/5 px-2 py-0.5 rounded">
-                                +₹{feat.cost.toLocaleString()}
+                                +₹{feat.cost.toLocaleString('en-IN')}
                               </span>
                             </div>
                             <p className="text-[11px] text-foreground/45 leading-relaxed">{feat.desc}</p>
@@ -228,7 +228,7 @@ export default function ScopeEstimatorClient() {
                               <div className="flex justify-between items-center mb-1">
                                 <span className="font-bold text-sm">{inf.name}</span>
                                 <span className="text-[10px] sm:text-xs text-brand-primary font-mono bg-brand-primary/5 px-2 py-0.5 rounded">
-                                  +₹{inf.cost.toLocaleString()}
+                                  +₹{inf.cost.toLocaleString('en-IN')}
                                 </span>
                               </div>
                               <p className="text-[11px] text-foreground/45 leading-relaxed">{inf.desc}</p>
@@ -268,7 +268,7 @@ export default function ScopeEstimatorClient() {
                         <ResultSummary 
                           title="Scoping Summary"
                           metrics={[
-                            { label: "Estimated Budget", value: `₹${estimates.minCost.toLocaleString()} - ₹${estimates.maxCost.toLocaleString()}` },
+                            { label: "Estimated Budget", value: `₹${estimates.minCost.toLocaleString('en-IN')} - ₹${estimates.maxCost.toLocaleString('en-IN')}` },
                             { label: "Timeline", value: `${estimates.timelineWeeks} Weeks` },
                             { label: "Architecture", value: appTypes.find((a) => a.id === selectedApp)?.name || "Custom App" },
                             { label: "Features Selected", value: selectedFeatures.length.toString() },
@@ -332,7 +332,7 @@ export default function ScopeEstimatorClient() {
                   <div>
                     <span className="text-[10px] font-bold text-brand-primary uppercase tracking-widest block mb-1">Live Estimated Budget</span>
                     <p className="text-3xl md:text-4xl font-black text-foreground">
-                      ₹{estimates.minCost.toLocaleString()} - ₹{estimates.maxCost.toLocaleString()}
+                      ₹{estimates.minCost.toLocaleString('en-IN')} - ₹{estimates.maxCost.toLocaleString('en-IN')}
                     </p>
                     <p className="text-[10px] text-foreground/45 leading-relaxed mt-1">Estimate based on active scoping specifications. Actual line-item quote may vary.</p>
                   </div>

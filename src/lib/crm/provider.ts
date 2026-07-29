@@ -2,6 +2,12 @@ import { CRMProvider } from "./types";
 import { MockCRMProvider } from "./mockProvider";
 import { TwentyCRMProvider } from "./twentyProvider";
 
+/**
+ * Factory function that instantiates and returns the active CRM provider based on environment variables.
+ * Defaults to MockCRMProvider if no variables are configured or if the requested provider is missing credentials.
+ * 
+ * @returns {CRMProvider} An instantiated class implementing the CRMProvider interface
+ */
 export function getCRMProvider(): CRMProvider {
   const providerName = process.env.CRM_PROVIDER?.toLowerCase() || "mock";
   

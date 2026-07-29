@@ -11,6 +11,13 @@ interface BuildLeadParams {
   result: Record<string, unknown>;
 }
 
+/**
+ * Constructs a fully normalized Lead payload object ready for validation and CRM mapping.
+ * Automatically injects necessary metadata such as submission timestamps.
+ * 
+ * @param params - The raw lead parameters captured from the frontend component
+ * @returns A structured Lead object
+ */
 export function buildLeadPayload(params: BuildLeadParams): Lead {
   return {
     lead: {

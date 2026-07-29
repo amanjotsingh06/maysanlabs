@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+/**
+ * Zod validation schema for the Lead domain model.
+ * Enforces strict typing and presence of required fields before CRM submission.
+ */
 export const LeadSchema = z.object({
   lead: z.object({
     name: z.string().min(2, "Name is required").max(100),

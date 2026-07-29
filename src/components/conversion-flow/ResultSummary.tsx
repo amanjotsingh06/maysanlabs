@@ -15,6 +15,14 @@ interface ResultSummaryProps {
   subtitle?: string;
 }
 
+/**
+ * A glass-styled summary card component used to display calculation results and metrics.
+ * Designed to be used alongside LeadCaptureCTA in the conversion funnel.
+ * 
+ * @param props.metrics - Array of metric objects to display (label, value, optional icon)
+ * @param props.title - Optional title for the summary card (defaults to "Calculation Results")
+ * @param props.subtitle - Optional subtitle providing additional context
+ */
 export default function ResultSummary({ metrics, title = "Calculation Results", subtitle }: ResultSummaryProps) {
   if (!metrics || metrics.length === 0) return null;
 

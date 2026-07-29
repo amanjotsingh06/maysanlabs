@@ -2,6 +2,10 @@ import { CRMProvider } from "./types";
 import { Lead, LeadSubmissionResult } from "@/lib/lead/types";
 import { mapLeadToCrmPayload } from "./crmMapper";
 
+/**
+ * Implementation of the CRMProvider interface for Twenty CRM.
+ * Handles authentication and data submission to the Twenty REST API.
+ */
 export class TwentyCRMProvider implements CRMProvider {
   private apiUrl: string;
   private apiKey: string;
@@ -11,11 +15,17 @@ export class TwentyCRMProvider implements CRMProvider {
     this.apiKey = apiKey;
   }
 
+  /**
+   * Transforms a generic Lead object into a Twenty-specific payload and submits it to the /people endpoint.
+   * 
+   * @param lead - The generic Lead object captured from the frontend
+   * @returns A promise resolving to a LeadSubmissionResult
+   */
   async createLead(lead: Lead): Promise<LeadSubmissionResult> {
     const payload = mapLeadToCrmPayload(lead);
     
     try {
-      const response = await fetch(`${this.apiUrl}/person`, {
+      const response = await fetch(`${this.apiUrl}/people`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,9 +37,22 @@ export class TwentyCRMProvider implements CRMProvider {
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
         console.error("[TwentyCRMProvider] API Error:", errorData || response.statusText);
+
+        // Handle Twenty CRM duplicate email error gracefully
+        const isDuplicate = errorData?.messages?.some((msg: string) => 
+          msg.toLowerCase().includes('duplicate')
+        );
+
+        if (isDuplicate) {
+          return {
+            success: false,
+            message: "A request with this email has already been submitted. We'll be in touch soon!",
+          };
+        }
+
         return {
           success: false,
-          message: `CRM Error: ${response.statusText}`,
+          message: "We encountered an issue processing your request. Please try again later.",
         };
       }
 
@@ -43,11 +66,16 @@ export class TwentyCRMProvider implements CRMProvider {
       console.error("[TwentyCRMProvider] Network Error:", error);
       return {
         success: false,
-        message: "Network error occurred while submitting to CRM",
+        message: "A network error occurred. Please check your connection and try again.",
       };
     }
   }
 
+  /**
+   * Pings the Twenty CRM health endpoint to verify connectivity and authentication.
+   * 
+   * @returns True if the CRM is reachable and credentials are valid, false otherwise.
+   */
   async healthCheck(): Promise<boolean> {
     try {
       const res = await fetch(`${this.apiUrl}/health`, {

@@ -14,6 +14,17 @@ export interface LeadCaptureFormProps {
   buttonIcon?: React.ReactNode;
 }
 
+/**
+ * The core Lead Capture Form component used across the application to gather visitor details.
+ * Manages form state, handles CRM submission via Server Actions, and displays success/error states.
+ * 
+ * @param props.toolName - The name of the tool where this form is displayed
+ * @param props.pagePath - The URL path where the conversion occurred
+ * @param props.resultData - The structured calculation results to attach to the lead
+ * @param props.onLeadSubmitted - Optional callback fired when the lead is successfully created
+ * @param props.buttonLabel - Text to display on the submit button
+ * @param props.buttonIcon - Icon to display on the submit button
+ */
 export default function LeadCaptureForm({
   toolName,
   pagePath,

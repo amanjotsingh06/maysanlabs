@@ -10,6 +10,15 @@ interface LeadCaptureCTAProps extends Omit<LeadCaptureFormProps, "buttonLabel" |
   buttonIcon?: React.ReactNode;
 }
 
+/**
+ * An inline Call-To-Action component that wraps the LeadCaptureForm.
+ * Provides contextual messaging to encourage users to submit their generated tool results.
+ * 
+ * @param props.title - The headline for the CTA banner
+ * @param props.description - The subtext explaining why the user should submit their details
+ * @param props.buttonLabel - Custom text for the form submission button
+ * @param props.buttonIcon - Optional icon for the form submission button
+ */
 export default function LeadCaptureCTA({
   title = "Book a Free Discovery Call",
   description = "Want our engineering team to turn this blueprint into reality? Submit your details to receive expert guidance tailored to your business.",

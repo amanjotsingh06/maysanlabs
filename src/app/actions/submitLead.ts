@@ -5,6 +5,13 @@ import { createLead } from "@/lib/crm/client";
 import { LeadSchema } from "@/lib/lead/validation";
 import { LeadSubmissionResult } from "@/lib/lead/types";
 
+/**
+ * Next.js Server Action responsible for receiving lead submissions from the frontend.
+ * Validates the raw payload using Zod and delegates to the CRM infrastructure layer.
+ * 
+ * @param payload - The untyped raw payload from the client form
+ * @returns A promise resolving to a LeadSubmissionResult
+ */
 export async function submitLead(payload: unknown): Promise<LeadSubmissionResult> {
   try {
     const validationResult = LeadSchema.safeParse(payload);

@@ -102,7 +102,7 @@ export default function HeadlessRoiClient() {
                 <div>
                   <label htmlFor="sales-slider" className="flex justify-between text-sm font-semibold mb-2">
                     <span>Monthly Store Revenue</span>
-                    <span className="text-brand-primary font-mono">₹{monthlySales.toLocaleString()}</span>
+                    <span className="text-brand-primary font-mono">₹{monthlySales.toLocaleString('en-IN')}</span>
                   </label>
                   <input
                     id="sales-slider"
@@ -189,7 +189,7 @@ export default function HeadlessRoiClient() {
                   <div>
                     <span className="text-[10px] font-bold text-brand-primary uppercase tracking-widest block mb-1">Projected Annual Savings</span>
                     <p className="text-4xl md:text-5xl font-black text-foreground">
-                      ₹{calculations.annualNetSavings.toLocaleString()}
+                      ₹{calculations.annualNetSavings.toLocaleString('en-IN')}
                     </p>
                     <p className="text-[10px] text-foreground/40 mt-1">Calculated from speed conversion boost & bypassed fees</p>
                   </div>
@@ -206,21 +206,21 @@ export default function HeadlessRoiClient() {
                     <div className="flex justify-between items-center text-xs">
                       <span className="text-foreground/50">Annual Speed Revenue Gain</span>
                       <span className="font-bold text-foreground">
-                        +₹{(calculations.monthlyRevenueLift * 12).toLocaleString()}
+                        +₹{(calculations.monthlyRevenueLift * 12).toLocaleString('en-IN')}
                       </span>
                     </div>
 
                     <div className="flex justify-between items-center text-xs">
                       <span className="text-foreground/50">Platform Tech Costs (Annual)</span>
                       <span className="font-bold text-red-400">
-                        ₹{(calculations.totalPlatformCostMonthly * 12).toLocaleString()}
+                        ₹{(calculations.totalPlatformCostMonthly * 12).toLocaleString('en-IN')}
                       </span>
                     </div>
 
                     <div className="flex justify-between items-center text-xs">
                       <span className="text-foreground/50">Headless Costs (Annual)</span>
                       <span className="font-bold text-green-400">
-                        ₹{(calculations.totalHeadlessCostMonthly * 12).toLocaleString()}
+                        ₹{(calculations.totalHeadlessCostMonthly * 12).toLocaleString('en-IN')}
                       </span>
                     </div>
                   </div>
@@ -266,9 +266,9 @@ export default function HeadlessRoiClient() {
               <ResultSummary 
                 title="Calculated ROI"
                 metrics={[
-                  { label: "Annual Net Savings", value: `₹${calculations.annualNetSavings.toLocaleString()}` },
+                  { label: "Annual Net Savings", value: `₹${calculations.annualNetSavings.toLocaleString('en-IN')}` },
                   { label: "Break-even Timeline", value: `${calculations.breakEvenMonths} Months` },
-                  { label: "Projected Speed Conversion Lift", value: `+₹${Math.round(calculations.monthlyRevenueLift * 12).toLocaleString()} / year` },
+                  { label: "Projected Speed Conversion Lift", value: `+₹${Math.round(calculations.monthlyRevenueLift * 12).toLocaleString('en-IN')} / year` },
                 ]}
               />
 
