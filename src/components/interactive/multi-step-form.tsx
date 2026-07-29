@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, CheckCircle, Briefcase, Code, Mail, Send, Loader2, AlertCircle } from "lucide-react";
-import { sendEmail } from "@/app/actions/sendEmail";
+import { submitLead } from "@/app/actions/submitLead";
+import { buildLeadPayload } from "@/lib/lead/payloadBuilder";
 
 const steps = [
   { id: 1, title: "Project Type", icon: Briefcase },
@@ -52,23 +53,37 @@ export default function MultiStepForm() {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     setError(null);
-    const data = new FormData();
-    data.append("companyName", formData.name);
-    data.append("email", formData.email);
-    data.append("contact", formData.phone);
-    data.append("requirements", `Type: ${formData.projectType}, Budget: ${formData.budget}. Description: ${formData.description}`);
+
+    // Bot honeypot protection
+    if (formData.website) {
+      setIsSubmitted(true);
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
-      const result = await sendEmail(data);
+      const payload = buildLeadPayload({
+        name: formData.name,
+        email: formData.email,
+        companyName: formData.name, // User inputs Name/Company in same field
+        phone: formData.phone,
+        tool: "MultiStepForm",
+        page: "/",
+        result: {
+          projectType: formData.projectType,
+          budget: formData.budget,
+          description: formData.description,
+        },
+      });
+
+      const result = await submitLead(payload);
+
       if (result.success) {
         setIsSubmitted(true);
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({ event: "project_form_submit", projectType: formData.projectType, budget: formData.budget });
       } else {
         setError(result.message || "Something went wrong. Please try again.");
-        if ("error" in result && result.error) {
-          console.error("Send error detail:", result.error);
-        }
       }
     } catch (error) {
       setError("Failed to send message. Please try again.");
