@@ -32,7 +32,6 @@ export default function MultiStepForm() {
     name: "",
     email: "",
     phone: "",
-    website: "", // honeypot field
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -53,13 +52,6 @@ export default function MultiStepForm() {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     setError(null);
-
-    // Bot honeypot protection
-    if (formData.website) {
-      setIsSubmitted(true);
-      setIsSubmitting(false);
-      return;
-    }
 
     try {
       const payload = buildLeadPayload({
@@ -250,19 +242,6 @@ export default function MultiStepForm() {
                     onChange={(e) => updateFormData("phone", e.target.value)}
                     placeholder="+1 234 567 8900"
                     className="w-full bg-white/50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-foreground placeholder:text-foreground/30 focus:border-brand-primary/50 focus:outline-none focus:ring-2 focus:ring-brand-primary/50 transition-all"
-                  />
-                </div>
-                
-                {/* Honeypot field - hidden from humans, visible to bots */}
-                <div className="absolute left-[-9999px]">
-                  <label htmlFor="website">Website</label>
-                  <input
-                    id="website"
-                    type="text"
-                    value={formData.website}
-                    onChange={(e) => updateFormData("website", e.target.value)}
-                    aria-hidden="true"
-                    tabIndex={-1}
                   />
                 </div>
               </div>
