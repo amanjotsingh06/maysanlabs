@@ -8,7 +8,12 @@ const CACHE_TTL_MS = 5 * 60 * 1000;
 
 export async function POST(request: NextRequest) {
   const origin = request.headers.get('origin') || request.headers.get('referer') || '';
-  const allowedOrigins = ['https://maysanlabs.com', 'http://localhost:3000', 'http://localhost:3001'];
+  const allowedOrigins = [
+    'https://maysanlabs.com', 
+    'https://www.maysanlabs.com', 
+    'http://localhost:3000', 
+    'http://localhost:3001'
+  ];
   if (origin && !allowedOrigins.some(o => origin.startsWith(o))) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
@@ -42,7 +47,9 @@ export async function POST(request: NextRequest) {
 
     const params = new URLSearchParams();
     params.append("url", fullUrl);
-    params.append("key", apiKey);
+    if (apiKey) {
+      params.append("key", apiKey);
+    }
     params.append("strategy", strategy);
     params.append("category", "performance");
     params.append("category", "seo");
