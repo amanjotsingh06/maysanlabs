@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { ChevronRight, ExternalLink, Clock, ArrowUpRight, Search } from "lucide-react";
 import Link from "next/link";
-import { BlogPost } from "@/sanity/lib/queries";
+import type { BlogPost } from "@/sanity/lib/queries";
 
 const POSTS_PER_PAGE = 9;
 
@@ -36,7 +36,7 @@ function getInitials(name: string): string {
 }
 
 function getCategories(posts: BlogPost[]) {
-  const cats = new Set(posts.map(p => p.category));
+  const cats = new Set(posts.map(p => p.category || "Uncategorized"));
   return ["all", ...Array.from(cats)];
 }
 
@@ -53,7 +53,7 @@ function wrapCard(post: BlogPost, children: React.ReactNode) {
 
 function PostCard({ post }: { post: BlogPost }) {
   const isExternal = !!post.externalUrl;
-  const accent = getAccent(post.category);
+  const accent = getAccent(post.category || "Uncategorized");
 
   return wrapCard(post, (
     <article className="h-full bg-white/70 dark:bg-white/[0.02] border border-gray-100 dark:border-white/[0.06] rounded-xl overflow-hidden transition-all duration-300 hover:shadow-md hover:shadow-black/[0.03] dark:hover:shadow-black/20 hover:border-gray-200 dark:hover:border-white/10 hover:-translate-y-0.5 flex flex-col">
@@ -61,7 +61,7 @@ function PostCard({ post }: { post: BlogPost }) {
         <div className="flex items-center justify-between mb-3">
           <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider ${accent.bg} ${accent.text}`}>
             <span className={`w-1.5 h-1.5 rounded-full ${accent.dot}`} />
-            {post.category}
+            {post.category || "Uncategorized"}
           </span>
           <span className="flex items-center gap-1 text-[10px] text-foreground/30">
             <Clock size={10} />
@@ -74,15 +74,15 @@ function PostCard({ post }: { post: BlogPost }) {
         </h3>
 
         <p className="text-sm text-foreground/50 leading-relaxed line-clamp-2 mb-4 flex-1">
-          {post.excerpt}
+          {post.excerpt || ""}
         </p>
 
         <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-white/[0.04]">
           <div className="flex items-center gap-2 min-w-0">
             <div className="w-6 h-6 shrink-0 rounded-full bg-brand-primary/10 flex items-center justify-center text-brand-primary text-[8px] font-bold">
-              {getInitials(post.author)}
+              {getInitials(post.author || "Unknown")}
             </div>
-            <span className="text-xs text-foreground/40 truncate">{post.author}</span>
+            <span className="text-xs text-foreground/40 truncate">{post.author || "Unknown"}</span>
           </div>
           {isExternal && (
             <span className="flex items-center gap-1 text-[10px] text-foreground/30 shrink-0">
@@ -97,7 +97,7 @@ function PostCard({ post }: { post: BlogPost }) {
 }
 
 function FeaturedCard({ post }: { post: BlogPost }) {
-  const accent = getAccent(post.category);
+  const accent = getAccent(post.category || "Uncategorized");
   return (
     <Link href={`/blog/${post.slug}`} className="group block">
       <article className="relative overflow-hidden rounded-xl bg-gradient-to-br from-brand-primary/[0.06] via-brand-primary/[0.02] to-transparent border border-brand-primary/15 hover:border-brand-primary/25 transition-all duration-300 p-6 md:p-8">
@@ -108,7 +108,7 @@ function FeaturedCard({ post }: { post: BlogPost }) {
             <div className="flex items-center gap-3 mb-3">
               <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider ${accent.bg} ${accent.text}`}>
                 <span className={`w-1.5 h-1.5 rounded-full ${accent.dot}`} />
-                {post.category}
+                {post.category || "Uncategorized"}
               </span>
               <span className="text-[10px] text-foreground/30 flex items-center gap-1">
                 <Clock size={10} />
@@ -119,11 +119,11 @@ function FeaturedCard({ post }: { post: BlogPost }) {
               {post.title}
             </h2>
             <p className="text-sm text-foreground/50 leading-relaxed mb-4 max-w-lg">
-              {post.excerpt}
+              {post.excerpt || ""}
             </p>
             <div className="flex items-center gap-2 text-xs text-foreground/35">
-              <span className="w-5 h-5 rounded-full bg-brand-primary/10 flex items-center justify-center text-brand-primary text-[7px] font-bold">{getInitials(post.author)}</span>
-              {post.author}
+              <span className="w-5 h-5 rounded-full bg-brand-primary/10 flex items-center justify-center text-brand-primary text-[7px] font-bold">{getInitials(post.author || "Unknown")}</span>
+              {post.author || "Unknown"}
             </div>
           </div>
           <div className="shrink-0">
@@ -160,15 +160,15 @@ export default function BlogPageClient({ localPosts, externalPosts }: BlogPageCl
   const filteredPosts = useMemo(() => {
     let posts = allPosts;
     if (categoryFilter !== "all") {
-      posts = posts.filter((p) => p.category === categoryFilter);
+      posts = posts.filter((p) => (p.category || "Uncategorized") === categoryFilter);
     }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       posts = posts.filter(
         (p) =>
           p.title.toLowerCase().includes(q) ||
-          p.excerpt.toLowerCase().includes(q) ||
-          p.author.toLowerCase().includes(q) ||
+          (p.excerpt || "").toLowerCase().includes(q) ||
+          (p.author || "Unknown").toLowerCase().includes(q) ||
           p.tags?.some((t) => t.toLowerCase().includes(q))
       );
     }
@@ -256,7 +256,7 @@ export default function BlogPageClient({ localPosts, externalPosts }: BlogPageCl
           <h3 className="text-xs font-bold uppercase tracking-widest text-foreground/40 mb-4">Recent Articles</h3>
           <div className="space-y-3">
             {recentPosts.map((post) => {
-              const accent = getAccent(post.category);
+              const accent = getAccent(post.category || "Uncategorized");
               return (
                 <Link key={post.slug} href={`/blog/${post.slug}`} className="flex gap-3 group">
                   <span className={`w-0.5 shrink-0 rounded-full opacity-40 group-hover:opacity-100 transition-opacity ${accent.dot}`} />
@@ -264,7 +264,7 @@ export default function BlogPageClient({ localPosts, externalPosts }: BlogPageCl
                     <p className="text-sm font-medium text-foreground/70 group-hover:text-brand-primary transition-colors line-clamp-2 leading-snug">
                       {post.title}
                     </p>
-                    <p className="text-[10px] text-foreground/30 mt-1">{post.readTime} · {post.author}</p>
+                    <p className="text-[10px] text-foreground/30 mt-1">{post.readTime || ""} · {post.author || "Unknown"}</p>
                   </div>
                 </Link>
               );

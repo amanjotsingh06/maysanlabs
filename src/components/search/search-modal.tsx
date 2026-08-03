@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Search, X, ArrowRight } from "lucide-react";
 
 import { caseStudies } from "@/data/case-studies";
+import type { BlogPost } from "@/sanity/lib/queries";
 
 interface SearchItem {
   title: string;
@@ -44,7 +45,7 @@ const staticItems: SearchItem[] = [
 
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState("");
-  const [asyncBlogPosts, setAsyncBlogPosts] = useState<any[]>([]);
+  const [asyncBlogPosts, setAsyncBlogPosts] = useState<BlogPost[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -58,7 +59,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     ...staticItems,
     ...asyncBlogPosts.map((post) => ({
       title: post.title,
-      description: post.excerpt,
+      description: post.excerpt || "",
       url: `/blog/${post.slug}`,
       category: "blog",
     })),
@@ -68,7 +69,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       url: `/case-studies/${study.slug}`,
       category: "case-study",
     })),
-  ], []);
+  ], [asyncBlogPosts]);
 
   const fuse = useMemo(
     () =>

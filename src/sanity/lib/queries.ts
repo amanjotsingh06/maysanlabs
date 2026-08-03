@@ -1,15 +1,15 @@
 import { client } from './client'
-import { projectId, dataset } from '../env'
+
 
 export interface BlogPost {
   title: string
   slug: string
-  excerpt: string
-  content: string
+  excerpt?: string
+  content?: string
   date: string
-  author: string
-  category: string
-  readTime: string
+  author?: string
+  category?: string
+  readTime?: string
   tags?: string[]
   featured?: boolean
   externalUrl?: string
@@ -36,7 +36,11 @@ export async function getAllPosts(): Promise<BlogPost[]> {
     
     // If no posts are returned, return an empty array instead of failing
     if (!posts) return []
-    return posts
+    
+    // Filter out draft posts in production environments globally
+    return process.env.NODE_ENV === 'production' 
+      ? posts.filter((p: BlogPost) => !p.draft) 
+      : posts
   } catch (error) {
     console.error("Failed to fetch posts from Sanity:", error)
     return []
@@ -64,6 +68,12 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
     if (!post) {
       return null
     }
+    
+    // Hide draft post in production environments
+    if (process.env.NODE_ENV === 'production' && post.draft) {
+      return null
+    }
+    
     return post
   } catch (error) {
     console.error(`Failed to fetch post ${slug} from Sanity:`, error)

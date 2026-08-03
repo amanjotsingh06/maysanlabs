@@ -15,8 +15,7 @@ export const useCdn = false
 
 function assertValue<T>(v: T | undefined, errorMessage: string): T {
   if (v === undefined) {
-    console.warn(errorMessage)
-    return 'missing-env-var' as T
+    throw new Error(errorMessage)
   }
   return v
 }

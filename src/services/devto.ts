@@ -1,5 +1,5 @@
 import { safeFetch } from "@/core/security/ssrf";
-import { BlogPost } from "@/sanity/lib/queries";
+import type { BlogPost } from "@/sanity/lib/queries";
 
 interface DevToArticle {
   id: number;

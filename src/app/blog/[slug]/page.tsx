@@ -64,11 +64,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const prevPost = currentIndex > 0 ? blogPosts[currentIndex - 1] : null;
   const nextPost = currentIndex < blogPosts.length - 1 ? blogPosts[currentIndex + 1] : null;
 
-  const relatedPosts = blogPosts.filter((p) => p.slug !== slug && p.category === post.category).slice(0, 3);
+  const relatedPosts = blogPosts.filter((p) => p.slug !== slug && (p.category || "Uncategorized") === (post.category || "Uncategorized")).slice(0, 3);
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://maysanlabs.com";
   const blogJSONLD = generateBlogPostJSONLD(post, siteUrl);
-  const style = getCatStyle(post.category);
+  const style = getCatStyle(post.category || "Uncategorized");
 
   const shareUrl = `${siteUrl}/blog/${post.slug}`;
   const shareText = encodeURIComponent(post.title);
@@ -98,11 +98,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <div className="flex flex-wrap items-center gap-3 mb-4">
                 <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-semibold uppercase tracking-wider ${style.bg} ${style.text}`}>
                   <span className={`w-1.5 h-1.5 rounded-full ${style.dot}`} />
-                  {post.category}
+                  {post.category || "Uncategorized"}
                 </span>
                 <span className="flex items-center gap-1.5 text-xs text-foreground/35">
                   <Clock size={12} />
-                  {post.readTime} read
+                  {post.readTime || ""} read
                 </span>
               </div>
 
@@ -111,16 +111,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </h1>
 
               <p className="text-base sm:text-lg text-foreground/50 leading-relaxed mb-6">
-                {post.excerpt}
+                {post.excerpt || ""}
               </p>
 
               <div className="flex items-center gap-4 pt-5 border-t border-gray-100 dark:border-white/[0.05]">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full bg-brand-primary/10 flex items-center justify-center text-brand-primary text-[10px] sm:text-xs font-bold border border-brand-primary/15">
-                    {getInitials(post.author)}
+                    {getInitials(post.author || "Unknown")}
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-foreground/70">{post.author}</p>
+                    <p className="text-sm font-medium text-foreground/70">{post.author || "Unknown"}</p>
                     <time className="text-xs text-foreground/35" dateTime={post.date}>
                       {new Date(post.date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
                     </time>
@@ -147,7 +147,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
               <article className="flex-1 min-w-0">
                 <div className="prose-custom bg-white/50 dark:bg-white/[0.01] border border-gray-100 dark:border-white/[0.04] rounded-xl p-6 sm:p-8 md:p-10">
-                  {post.content.split("\n\n").map((paragraph, index) => (
+                  {(post.content || "").split("\n\n").map((paragraph, index) => (
                     <p key={index} className="text-[15px] sm:text-[17px] text-foreground/70 leading-[1.8] mb-6 last:mb-0">
                       {paragraph}
                     </p>
@@ -164,7 +164,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   </div>
                 )}
 
-                <CaseStudyCallout blogCategory={post.category} />
+                <CaseStudyCallout blogCategory={post.category || "Uncategorized"} />
 
                 <div className="mt-6 lg:hidden">
                   <p className="text-xs text-foreground/30 mb-3">Share this article</p>
@@ -181,12 +181,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
                 <div className="mt-10 mb-10 bg-white/50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/[0.06] rounded-xl p-6 sm:p-8 flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
                   <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-brand-primary/10 flex-shrink-0 flex items-center justify-center text-brand-primary text-sm sm:text-lg font-bold border border-brand-primary/20">
-                    {getInitials(post.author)}
+                    {getInitials(post.author || "Unknown")}
                   </div>
                   <div>
-                    <h3 className="text-base sm:text-lg font-semibold text-foreground mb-1">About {post.author}</h3>
+                    <h3 className="text-base sm:text-lg font-semibold text-foreground mb-1">About {post.author || "Unknown"}</h3>
                     <p className="text-[13px] sm:text-sm text-foreground/60 leading-relaxed mb-3">
-                      {post.author} is a technology expert at Maysan Labs specializing in {post.category.toLowerCase()} and building scalable software solutions for growing businesses.
+                      {post.author || "Unknown"} is a technology expert at Maysan Labs specializing in {(post.category || "Uncategorized").toLowerCase()} and building scalable software solutions for growing businesses.
                     </p>
                     <a href="https://www.linkedin.com/company/maysanlabs" target="_blank" rel="noopener noreferrer" className="text-[12px] font-semibold text-brand-primary hover:underline inline-flex items-center gap-1">
                       Connect on LinkedIn <ArrowRight size={12} />
@@ -212,17 +212,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <h3 className="text-xs font-bold uppercase tracking-widest text-foreground/30 mb-6">Related Articles</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {relatedPosts.map((rp) => {
-                  const rpStyle = getCatStyle(rp.category);
+                  const rpStyle = getCatStyle(rp.category || "Uncategorized");
                   return (
                     <SafeLink key={rp.slug} href={`/blog/${rp.slug}`} className="group bg-white/70 dark:bg-white/[0.02] border border-gray-100 dark:border-white/[0.06] rounded-xl p-5 transition-all duration-200 hover:border-brand-primary/20 hover:shadow-md hover:-translate-y-0.5">
                       <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[9px] font-semibold uppercase tracking-wider ${rpStyle.bg} ${rpStyle.text} mb-2.5`}>
                         <span className={`w-1 h-1 rounded-full ${rpStyle.dot}`} />
-                        {rp.category}
+                        {rp.category || "Uncategorized"}
                       </span>
                       <h4 className="text-sm font-medium text-foreground group-hover:text-brand-primary transition-colors line-clamp-2 leading-snug">
                         {rp.title}
                       </h4>
-                      <p className="text-xs text-foreground/35 mt-2 line-clamp-2">{rp.excerpt}</p>
+                      <p className="text-xs text-foreground/35 mt-2 line-clamp-2">{rp.excerpt || ""}</p>
                     </SafeLink>
                   );
                 })}

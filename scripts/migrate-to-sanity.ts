@@ -27,7 +27,11 @@ async function migrate() {
   
   for (const post of blogPosts) {
     try {
+      const baseId = `post-${post.slug}`
+      const _id = post.draft ? `drafts.${baseId}` : baseId
+      
       const doc = {
+        _id,
         _type: 'post',
         title: post.title,
         slug: { _type: 'slug', current: post.slug },
@@ -43,7 +47,7 @@ async function migrate() {
         draft: post.draft || false,
       }
       
-      const result = await client.create(doc)
+      const result = await client.createOrReplace(doc)
       console.log(`Created post: ${result.title} (${result._id})`)
     } catch (err) {
       console.error(`Failed to create post ${post.slug}:`, err)

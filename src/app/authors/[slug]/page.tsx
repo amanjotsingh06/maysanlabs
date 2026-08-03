@@ -46,7 +46,7 @@ export default async function AuthorPage({ params }: Props) {
 
   const blogPosts = await getAllPosts();
   const posts = blogPosts.filter(
-    p => p.author.toLowerCase().replace(/\s+/g, "-") === slug
+    p => (p.author || "Unknown").toLowerCase().replace(/\s+/g, "-") === slug
   );
 
   return (
@@ -100,11 +100,11 @@ export default async function AuthorPage({ params }: Props) {
               {posts.map((post) => (
                 <Link key={post.slug} href={`/blog/${post.slug}`} className="group bg-white/70 dark:bg-white/[0.02] border border-gray-100 dark:border-white/[0.06] rounded-xl p-5 transition-all duration-200 hover:border-brand-primary/20 hover:shadow-md hover:-translate-y-0.5">
                   <h3 className="text-[15px] font-semibold text-foreground group-hover:text-brand-primary transition-colors mb-1.5">{post.title}</h3>
-                  <p className="text-sm text-foreground/50 line-clamp-2">{post.excerpt}</p>
+                  <p className="text-sm text-foreground/50 line-clamp-2">{post.excerpt || ""}</p>
                   <div className="flex items-center gap-3 mt-3 text-xs text-foreground/30">
-                    <span>{post.category}</span>
+                    <span>{post.category || "Uncategorized"}</span>
                     <span>·</span>
-                    <span>{post.readTime}</span>
+                    <span>{post.readTime || ""}</span>
                     <span>·</span>
                     <time>{new Date(post.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</time>
                   </div>
