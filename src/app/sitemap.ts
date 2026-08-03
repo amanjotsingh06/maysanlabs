@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 import fs from 'fs'
 import path from 'path'
-import { blogPosts } from '@/data/blog'
+import { getAllPosts } from '@/sanity/lib/queries'
 import { caseStudies } from '@/data/case-studies'
 import { seoLandingPages } from '@/data/seo-landing'
 
@@ -50,7 +50,7 @@ const DEFAULT_CONFIG = { priority: 0.6, changeFrequency: 'monthly' as const }
 const ROUTE_DEPENDENCIES: Record<string, string[]> = {
   '/': ['src/app/page.tsx', 'src/app/layout.tsx', 'next.config.js'],
   '/careers': ['src/app/careers/page.tsx', 'src/app/careers/layout.tsx', 'src/data/careers.ts', 'src/app/layout.tsx'],
-  '/blog': ['src/app/blog/page.tsx', 'src/data/blog.ts', 'src/app/layout.tsx'],
+  '/blog': ['src/app/blog/page.tsx', 'src/app/layout.tsx'],
   '/case-studies': ['src/app/case-studies/page.tsx', 'src/data/case-studies.ts', 'src/app/layout.tsx'],
   '/services': ['src/app/services/page.tsx', 'src/app/layout.tsx'],
   '/products': ['src/app/products/page.tsx', 'src/app/layout.tsx'],
@@ -151,9 +151,10 @@ function discoverRoutes(dir: string, basePath: string = ''): MetadataRoute.Sitem
   return entries
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const appDir = path.join(process.cwd(), 'src', 'app')
   const routes = discoverRoutes(appDir)
+  const blogPosts = await getAllPosts()
 
   // Add dynamic blog routes
   blogPosts.filter(post => !post.draft).forEach(post => {

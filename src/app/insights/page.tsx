@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import InsightsClient from "./InsightsClient";
+import { getAllPosts } from "@/sanity/lib/queries";
 import { generateBreadcrumbSchema } from "@/seo/helpers";
 
 const ogImage = (t: string, d?: string) =>
@@ -37,12 +38,13 @@ const breadcrumbSchema = generateBreadcrumbSchema([
   { name: "Insights", url: "/insights" }
 ]);
 
-export default function InsightsPage() {
+export default async function InsightsPage() {
+  const posts = await getAllPosts();
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
 
-      <InsightsClient />
+      <InsightsClient blogPosts={posts} />
     </>
   );
 }

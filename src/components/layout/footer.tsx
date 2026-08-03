@@ -30,6 +30,7 @@ const linkGroups = [
       { name: "Free Tools", href: "/tools" },
       { name: "Pricing", href: "/pricing" },
       { name: "About", href: "/about" },
+      { name: "Admin Login", href: "/studio" },
     ],
   },
 ];

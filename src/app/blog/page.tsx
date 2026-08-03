@@ -3,7 +3,7 @@ import Navbar from "@/components/layout/navbar";
 import Newsletter from "@/components/marketing/newsletter";
 import ContactFooter from "@/components/layout/footer";
 import BlogPageClient from "@/components/blog/blog-page-client";
-import { blogPosts } from "@/data/blog";
+import { getAllPosts, BlogPost } from "@/sanity/lib/queries";
 import { fetchExternalTechBlogs } from "@/services/devto";
 import { Metadata } from "next";
 import { generateBreadcrumbSchema } from "@/seo/helpers";
@@ -47,7 +47,7 @@ const breadcrumbSchema = generateBreadcrumbSchema([
   { name: "Blog", url: "/blog" }
 ]);
 
-const getBlogSchema = (posts: typeof blogPosts) => ({
+const getBlogSchema = (posts: BlogPost[]) => ({
   "@context": "https://schema.org",
   "@type": "Blog",
   name: "Maysan Labs Blog",
@@ -72,6 +72,7 @@ const getBlogSchema = (posts: typeof blogPosts) => ({
 });
 
 export default async function BlogListingPage() {
+  const blogPosts = await getAllPosts();
   const externalPosts = await fetchExternalTechBlogs();
   const visiblePosts = blogPosts.filter(
     (post) => process.env.NODE_ENV !== "production" || !post.draft

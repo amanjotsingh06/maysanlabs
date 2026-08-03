@@ -3,12 +3,12 @@ import type { Metadata } from "next";
 interface BlogPost {
   title: string;
   slug: string;
-  excerpt: string;
-  content: string;
+  excerpt?: string;
+  content?: string;
   date: string;
-  author: string;
-  category: string;
-  readTime: string;
+  author?: string;
+  category?: string;
+  readTime?: string;
 }
 
 interface CaseStudy {
@@ -44,10 +44,10 @@ export function generateBlogPostSEO(post: BlogPost, siteUrl: string): Metadata {
   const og = ogImageUrl(post.title, post.excerpt);
   return {
     title: `${post.title} | Blog`,
-    description: post.excerpt,
+    description: post.excerpt || "",
     keywords: [
       post.title.toLowerCase(),
-      post.category.toLowerCase(),
+      (post.category || "Uncategorized").toLowerCase(),
       "Maysan Labs",
       "blog",
       "technology",
@@ -56,12 +56,12 @@ export function generateBlogPostSEO(post: BlogPost, siteUrl: string): Metadata {
     ].filter(Boolean),
     openGraph: {
       title: post.title,
-      description: post.excerpt,
+      description: post.excerpt || "",
       url: `${siteUrl}/blog/${post.slug}`,
       type: "article",
       publishedTime: post.date,
-      authors: [post.author],
-      section: post.category,
+      authors: [post.author || "Unknown"],
+      section: post.category || "Uncategorized",
       images: [
         {
           url: og,
@@ -74,7 +74,7 @@ export function generateBlogPostSEO(post: BlogPost, siteUrl: string): Metadata {
     twitter: {
       card: "summary_large_image",
       title: post.title,
-      description: post.excerpt,
+      description: post.excerpt || "",
       images: [og]
     },
     alternates: {
@@ -87,21 +87,21 @@ export function generateBlogPostSEO(post: BlogPost, siteUrl: string): Metadata {
  * Generate JSON-LD for blog post
  */
 export function generateBlogPostJSONLD(post: BlogPost, siteUrl: string) {
-  const personName = post.author;
-  const authorSlug = post.author.toLowerCase().replace(/\s+/g, "-");
+  const personName = post.author || "Unknown";
+  const authorSlug = (post.author || "Unknown").toLowerCase().replace(/\s+/g, "-");
   const personUrl = `${siteUrl}/authors/${authorSlug}`;
 
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
-    description: post.excerpt,
+    description: post.excerpt || "",
     image: [
       `${siteUrl}/og-image.png`
     ],
     datePublished: post.date,
     dateModified: post.date,
-    articleSection: post.category,
+    articleSection: post.category || "Uncategorized",
     author: {
       "@type": "Person",
       name: personName,
@@ -115,7 +115,7 @@ export function generateBlogPostJSONLD(post: BlogPost, siteUrl: string) {
         "https://github.com/maysanlabs",
         "https://in.linkedin.com/company/maysanlabs"
       ],
-      knowsAbout: [post.category, "Enterprise SaaS", "Software Development", "Cloud Architecture"]
+      knowsAbout: [post.category || "Uncategorized", "Enterprise SaaS", "Software Development", "Cloud Architecture"]
     },
     publisher: {
       "@type": "Organization",
@@ -126,10 +126,10 @@ export function generateBlogPostJSONLD(post: BlogPost, siteUrl: string) {
       }
     },
     url: `${siteUrl}/blog/${post.slug}`,
-    section: post.category,
+    section: post.category || "Uncategorized",
     keywords: [
       post.title,
-      post.category,
+      post.category || "Uncategorized",
       "Maysan Labs",
       "blog",
       "enterprise software",
@@ -141,7 +141,7 @@ export function generateBlogPostJSONLD(post: BlogPost, siteUrl: string) {
     },
     about: {
       "@type": "Thing",
-      name: post.category
+      name: post.category || "Uncategorized"
     },
     mentions: [
       { "@type": "Thing", name: "Enterprise SaaS" },

@@ -5,7 +5,7 @@ import { Activity, Database, TrendingUp, Shield, BarChart3, ArrowRight, BookOpen
 import { SafeLink } from "@/components/ui/SafeLink";
 import Navbar from "@/components/layout/navbar";
 import ContactFooter from "@/components/layout/footer";
-import { blogPosts } from "@/data/blog";
+import type { BlogPost } from "@/sanity/lib/queries";
 import { caseStudies } from "@/data/case-studies";
 
 const insights = [
@@ -39,19 +39,6 @@ const insights = [
   },
 ];
 
-const recentPosts = [...blogPosts]
-  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  .slice(0, 3);
-
-const categoryCount = blogPosts.reduce<Record<string, number>>((acc, p) => {
-  acc[p.category] = (acc[p.category] || 0) + 1;
-  return acc;
-}, {});
-
-const topCategories = Object.entries(categoryCount)
-  .sort(([, a], [, b]) => b - a)
-  .slice(0, 6);
-
 const techCount = caseStudies.reduce<Record<string, number>>((acc, cs) => {
   cs.technologies.forEach((t) => {
     acc[t] = (acc[t] || 0) + 1;
@@ -77,7 +64,21 @@ const categoryColors: Record<string, string> = {
   "Insights": "bg-brand-primary/20 text-brand-primary",
 };
 
-export default function InsightsClient() {
+export default function InsightsClient({ blogPosts }: { blogPosts: BlogPost[] }) {
+  const recentPosts = [...blogPosts]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 3);
+
+  const categoryCount = blogPosts.reduce<Record<string, number>>((acc, p) => {
+    const cat = p.category || "Uncategorized";
+    acc[cat] = (acc[cat] || 0) + 1;
+    return acc;
+  }, {});
+
+  const topCategories = Object.entries(categoryCount)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 6);
+
   return (
     <main id="main-content" className="min-h-screen bg-background text-foreground flex flex-col relative overflow-hidden">
       <div className="absolute inset-0 bg-grid-pattern pointer-events-none z-0" />
@@ -195,8 +196,8 @@ export default function InsightsClient() {
                 >
                   <div className="flex flex-col h-full gap-4">
                     <div className="flex items-center gap-3 flex-wrap">
-                      <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${categoryColors[post.category] || "bg-white/[0.06] text-foreground/60"}`}>
-                        {post.category}
+                      <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${categoryColors[post.category || "Uncategorized"] || "bg-white/[0.06] text-foreground/60"}`}>
+                        {post.category || "Uncategorized"}
                       </span>
                       <span className="flex items-center gap-1 text-[11px] text-foreground/40">
                         <Clock size={11} />
@@ -207,12 +208,12 @@ export default function InsightsClient() {
                       {post.title}
                     </h3>
                     <p className="text-sm text-foreground/45 leading-relaxed flex-1">
-                      {post.excerpt}
+                      {post.excerpt || ""}
                     </p>
                     <div className="flex items-center justify-between pt-2 border-t border-white/[0.06]">
                       <span className="flex items-center gap-1.5 text-xs text-foreground/40">
                         <User size={12} />
-                        {post.author}
+                        {post.author || "Unknown"}
                       </span>
                       <span className="text-xs text-foreground/30">{post.date}</span>
                     </div>

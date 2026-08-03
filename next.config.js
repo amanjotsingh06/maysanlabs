@@ -23,17 +23,17 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value:
               "default-src 'self'; " +
-              "script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com 'unsafe-inline' 'unsafe-eval'; " +
+              "script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://*.sanity.io https://*.sanity-cdn.com https://va.vercel-scripts.com 'unsafe-inline' 'unsafe-eval'; " +
               "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; " +
-              "img-src 'self' data: blob: https: https://www.googleadservices.com; " +
-              "font-src 'self' https://fonts.gstatic.com data:; " +
-              "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://adservice.google.com https://www.googleadservices.com https://ip-api.com https://ipwho.is https://www.googleapis.com https://fonts.googleapis.com; " +
-              "frame-src 'self' https://www.googletagmanager.com https://td.doubleclick.net; " +
+              "img-src 'self' data: blob: https: https://www.googleadservices.com https://*.sanity.io https://*.sanity-cdn.com; " +
+              "font-src 'self' https://fonts.gstatic.com data: https://*.sanity.io; " +
+              "connect-src 'self' wss://*.sanity.io wss://sanity.io https://sanity.io https://*.sanity.io https://sanity-cdn.com https://*.sanity-cdn.com https://va.vercel-scripts.com https://registry.npmjs.org https://www.google-analytics.com https://www.googletagmanager.com https://adservice.google.com https://www.googleadservices.com https://ip-api.com https://ipwho.is https://www.googleapis.com https://fonts.googleapis.com; " +
+              "frame-src 'self' https://www.googletagmanager.com https://td.doubleclick.net https://*.sanity.io; " +
               "frame-ancestors 'self'; " +
               "base-uri 'self'; " +
               "form-action 'self'; " +
               "manifest-src 'self'; " +
-              "worker-src 'self'; " +
+              "worker-src 'self' blob:; " +
               "upgrade-insecure-requests",
           },
         ],
@@ -74,6 +74,7 @@ const nextConfig = {
       { protocol: "https", hostname: "ipwho.is" },
       { protocol: "https", hostname: "fonts.googleapis.com" },
       { protocol: "https", hostname: "fonts.gstatic.com" },
+      { protocol: "https", hostname: "cdn.sanity.io" },
     ],
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 30,
