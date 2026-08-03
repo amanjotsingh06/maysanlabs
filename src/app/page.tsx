@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { generateIndividualReviewSchemas } from "@/data/seo-schema";
-import { blogPosts } from "@/data/blog";
+import { getAllPosts } from "@/sanity/lib/queries";
 
 export const metadata: Metadata = {
   alternates: {
@@ -30,6 +30,7 @@ const ToolsShowcase = dynamic(() => import("@/components/interactive/tools-showc
 export const revalidate = 3600;
 
 export default async function Home() {
+  const blogPosts = await getAllPosts();
   const today = new Date().toISOString().split("T")[0];
   const visiblePosts = blogPosts.filter(
     (post) => process.env.NODE_ENV !== "production" || !post.draft

@@ -1,8 +1,9 @@
-import { blogPosts } from "@/data/blog";
+import { getAllPosts } from "@/sanity/lib/queries";
 import Link from "next/link";
 import { ArrowRight, Calendar, Clock } from "lucide-react";
 
-export default function LatestInsights() {
+export default async function LatestInsights() {
+  const blogPosts = await getAllPosts();
   const latest = blogPosts
     .filter((post) => process.env.NODE_ENV !== "production" || !post.draft)
     .slice(0, 3);

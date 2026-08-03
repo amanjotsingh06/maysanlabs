@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { blogPosts } from "@/data/blog";
+import { getAllPosts, getPostBySlug } from "@/sanity/lib/queries";
 import Navbar from "@/components/layout/navbar";
 import ContactFooter from "@/components/layout/footer";
 import ReadingProgress from "@/components/tracking/reading-progress";
@@ -43,21 +43,23 @@ function getCatStyle(category: string) {
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = blogPosts.find((p) => p.slug === slug);
+  const post = await getPostBySlug(slug);
   if (!post) return { title: "Post Not Found" };
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://maysanlabs.com";
   return generateBlogPostSEO(post, siteUrl);
 }
 
 export async function generateStaticParams() {
+  const blogPosts = await getAllPosts();
   return blogPosts.map((post) => ({ slug: post.slug }));
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  const post = blogPosts.find((p) => p.slug === slug);
+  const post = await getPostBySlug(slug);
   if (!post) notFound();
 
+  const blogPosts = await getAllPosts();
   const currentIndex = blogPosts.findIndex((p) => p.slug === slug);
   const prevPost = currentIndex > 0 ? blogPosts[currentIndex - 1] : null;
   const nextPost = currentIndex < blogPosts.length - 1 ? blogPosts[currentIndex + 1] : null;

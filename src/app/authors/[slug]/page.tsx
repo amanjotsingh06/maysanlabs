@@ -1,7 +1,7 @@
 import { authors } from "@/data/authors";
 import Navbar from "@/components/layout/navbar";
 import ContactFooter from "@/components/layout/footer";
-import { blogPosts } from "@/data/blog";
+import { getAllPosts } from "@/sanity/lib/queries";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -44,6 +44,7 @@ export default async function AuthorPage({ params }: Props) {
   const author = authors.find(a => a.slug === slug);
   if (!author) notFound();
 
+  const blogPosts = await getAllPosts();
   const posts = blogPosts.filter(
     p => p.author.toLowerCase().replace(/\s+/g, "-") === slug
   );

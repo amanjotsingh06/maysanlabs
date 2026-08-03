@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Fuse from "fuse.js";
 import Link from "next/link";
 import { Search, X, ArrowRight } from "lucide-react";
-import { blogPosts } from "@/data/blog";
+
 import { caseStudies } from "@/data/case-studies";
 
 interface SearchItem {
@@ -44,12 +44,19 @@ const staticItems: SearchItem[] = [
 
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState("");
+  const [asyncBlogPosts, setAsyncBlogPosts] = useState<any[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (isOpen && asyncBlogPosts.length === 0) {
+      fetch('/api/posts').then(res => res.json()).then(data => setAsyncBlogPosts(data)).catch(console.error);
+    }
+  }, [isOpen, asyncBlogPosts.length]);
+
   const allItems = useMemo<SearchItem[]>(() => [
     ...staticItems,
-    ...blogPosts.map((post) => ({
+    ...asyncBlogPosts.map((post) => ({
       title: post.title,
       description: post.excerpt,
       url: `/blog/${post.slug}`,

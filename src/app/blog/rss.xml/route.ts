@@ -1,4 +1,4 @@
-import { blogPosts } from '@/data/blog';
+import { getAllPosts } from '@/sanity/lib/queries';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://maysanlabs.com';
 
@@ -12,6 +12,7 @@ function escapeXml(str: string): string {
 }
 
 export async function GET() {
+  const blogPosts = await getAllPosts();
   const items = blogPosts
     .map(
       (post) => {

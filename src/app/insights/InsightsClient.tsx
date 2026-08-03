@@ -5,7 +5,7 @@ import { Activity, Database, TrendingUp, Shield, BarChart3, ArrowRight, BookOpen
 import { SafeLink } from "@/components/ui/SafeLink";
 import Navbar from "@/components/layout/navbar";
 import ContactFooter from "@/components/layout/footer";
-import { blogPosts } from "@/data/blog";
+import { BlogPost } from "@/sanity/lib/queries";
 import { caseStudies } from "@/data/case-studies";
 
 const insights = [
@@ -39,19 +39,6 @@ const insights = [
   },
 ];
 
-const recentPosts = [...blogPosts]
-  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  .slice(0, 3);
-
-const categoryCount = blogPosts.reduce<Record<string, number>>((acc, p) => {
-  acc[p.category] = (acc[p.category] || 0) + 1;
-  return acc;
-}, {});
-
-const topCategories = Object.entries(categoryCount)
-  .sort(([, a], [, b]) => b - a)
-  .slice(0, 6);
-
 const techCount = caseStudies.reduce<Record<string, number>>((acc, cs) => {
   cs.technologies.forEach((t) => {
     acc[t] = (acc[t] || 0) + 1;
@@ -77,7 +64,20 @@ const categoryColors: Record<string, string> = {
   "Insights": "bg-brand-primary/20 text-brand-primary",
 };
 
-export default function InsightsClient() {
+export default function InsightsClient({ blogPosts }: { blogPosts: BlogPost[] }) {
+  const recentPosts = [...blogPosts]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 3);
+
+  const categoryCount = blogPosts.reduce<Record<string, number>>((acc, p) => {
+    acc[p.category] = (acc[p.category] || 0) + 1;
+    return acc;
+  }, {});
+
+  const topCategories = Object.entries(categoryCount)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 6);
+
   return (
     <main id="main-content" className="min-h-screen bg-background text-foreground flex flex-col relative overflow-hidden">
       <div className="absolute inset-0 bg-grid-pattern pointer-events-none z-0" />
